@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupAccount } from "./accountSlice";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const AccountAddForm = () => {
   const dispatch = useDispatch();
@@ -11,15 +14,19 @@ const AccountAddForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [dob, setDob] = useState(new Date());
 
   const onSendData = () => {
-    dispatch(signupAccount({ fname, lname, email, password, phone }));
+    if (fname && lname && email && password && phone) {
+      dispatch(signupAccount({ fname, lname, email, password, phone, dob }));
+    }
 
     setFname("");
     setLname("");
     setEmail("");
     setPassword("");
     setPhone("");
+    setDob("");
   };
 
   return (
@@ -65,6 +72,18 @@ const AccountAddForm = () => {
           type="text"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <DatePicker
+          selected={dob}
+          onChange={(date) => setDob(date)}
+          maxDate={new Date()}
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
+          placeholderText="enter your birth day"
         />
       </div>
 
