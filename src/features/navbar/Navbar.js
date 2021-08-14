@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 //import { Link, Redirect } from "react-router-dom";
 import { logOut } from "../account/accountSlice";
 //css
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import {
+  AppBar,
+  CssBaseline,
+  Toolbar,
+  Typography,
+  Button,
+} from "@material-ui/core";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -30,8 +31,9 @@ const Navbar = () => {
   // );
 
   return (
-    <div>
-      <AppBar>
+    <React.Fragment>
+      <CssBaseline />
+      <AppBar position="relative">
         <Toolbar>
           <Typography>Welcom to my website</Typography>
           {isLogged === false ? (
@@ -43,7 +45,32 @@ const Navbar = () => {
           )}
         </Toolbar>
       </AppBar>
-    </div>
+    </React.Fragment>
+
+    // <React.Fragment>
+    //   <CssBaseline />
+    //   <AppBar position="static" color="default" elevation={0}>
+    //     <Toolbar>
+    //       <Typography variant="h6" color="inherit" noWrap>
+    //         Company name
+    //       </Typography>
+    //       <nav>
+    //         <Link variant="button" color="textPrimary" href="#">
+    //           Features
+    //         </Link>
+    //         <Link variant="button" color="textPrimary" href="#">
+    //           Enterprise
+    //         </Link>
+    //         <Link variant="button" color="textPrimary" href="#">
+    //           Support
+    //         </Link>
+    //       </nav>
+    //       <Button href="#" color="primary" variant="outlined">
+    //         Login
+    //       </Button>
+    //     </Toolbar>
+    //   </AppBar>
+    // </React.Fragment>
   );
 };
 

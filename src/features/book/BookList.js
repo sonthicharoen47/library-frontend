@@ -10,22 +10,16 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Redirect } from "react-router-dom";
+import { CssBaseline } from "@material-ui/core";
 
 const BookList = () => {
   const dispatch = useDispatch();
   const { bookList } = useSelector((state) => state.book);
   const { isLogged } = useSelector((state) => state.account);
 
-  const test = () => {
-    dispatch(getAllBook());
-  };
-
   useEffect(() => {
-    // if (isLogged === false) {
-    //   <Redirect to="/login" />;
-    // } else {
-    test();
-  }, []);
+    dispatch(getAllBook());
+  }, [dispatch]);
 
   if (isLogged === false) {
     console.log(isLogged);
@@ -76,13 +70,11 @@ const BookList = () => {
   // }
 
   return (
-    <section>
-      <br />
-      <br />
-      <br />
+    <React.Fragment>
+      <CssBaseline />
       <h2>Book!!!</h2>
       {renderBook}
-    </section>
+    </React.Fragment>
   );
 };
 

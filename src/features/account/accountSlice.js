@@ -2,11 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { registerAccount } from "../../api/accountApi";
 
 const initialState = {
-  loading: false,
-  message: "",
+  status: "idle",
   token: "",
   user: {},
   isLogged: false,
+  error: null,
+  message: "",
 };
 
 export const signupAccount = createAsyncThunk("signupaccount", async (body) => {
@@ -28,17 +29,21 @@ const accountSlice = createSlice({
       state.user = {};
       state.isLogged = false;
     },
+    updateStatus: (state, action) => {
+      state.status = action.payload;
+    },
   },
 
   extraReducers: {
     [signupAccount.pending]: (state, action) => {
-      state.loading = true;
+      state.status = "loading";
     },
     [signupAccount.fulfilled]: (state, action) => {
-      state.loading = false;
-      if (action.payload.message) {
-        state.message = action.payload.message;
-      }
+      state.status = "success";
+      state.message = action.payload.message;
+    },
+    [signupAccount.rejected]: (state, action) => {
+      state.status = "fail";
     },
     [signinAccount.pending]: (state, action) => {
       state.loading = true;
@@ -52,5 +57,5 @@ const accountSlice = createSlice({
   },
 });
 
-export const { logOut } = accountSlice.actions;
+export const { logOut, updateStatus } = accountSlice.actions;
 export default accountSlice.reducer;
