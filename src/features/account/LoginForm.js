@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 //css
 import {
-  FormControlLabel,
-  Checkbox,
   Button,
   Grid,
   Typography,
@@ -40,7 +38,6 @@ const LoginForm = () => {
     setPassword("");
   };
 
-  console.log(`isLogged : ${isLogged}`);
   if (isLogged === true) {
     return <Redirect to="/book" />;
   }
@@ -50,7 +47,7 @@ const LoginForm = () => {
       <CssBaseline />
       <Box
         sx={{
-          marginTop: 16,
+          marginTop: 6,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -62,7 +59,12 @@ const LoginForm = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1, mb: 2 }}
+        >
           <TextField
             margin="normal"
             required
@@ -87,10 +89,6 @@ const LoginForm = () => {
             value={password}
             onChange={onPasswordChanged}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
             type="submit"
             fullWidth
@@ -101,9 +99,9 @@ const LoginForm = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              {/* <Link href="#" variant="body2">
                 Forgot password?
-              </Link>
+              </Link> */}
             </Grid>
             <Grid item>
               <Link href="/register" variant="body2">

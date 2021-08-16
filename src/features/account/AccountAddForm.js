@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupAccount, updateStatus } from "./accountSlice";
 import DatePicker from "react-datepicker";
@@ -15,13 +15,20 @@ import {
   Avatar,
   Typography,
   Container,
+  Snackbar,
 } from "@material-ui/core";
+
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Alert from "@material-ui/lab/Alert";
+import MuiAlert from "@material-ui/core/Alert";
+import Slide from "@material-ui/core/Slide";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const AccountAddForm = () => {
   const dispatch = useDispatch();
-  const { message, status } = useSelector((state) => state.account);
+  const { message, status, err } = useSelector((state) => state.account);
 
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -29,22 +36,11 @@ const AccountAddForm = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState(new Date());
-  const [alert, setAlert] = useState("");
-
-  useEffect(() => {
-    if (status === "success") {
-      setAlert(
-        <Alert variant="filled" severity="success">
-          {message}
-        </Alert>
-      );
-
-      setTimeout(() => {
-        setAlert("");
-        dispatch(updateStatus("idle"));
-      }, 1000);
-    }
-  }, [status, dispatch, message]);
+  const [alert, setAlert] = useState({
+    open: false,
+    text: "",
+    severity: "",
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,10 +56,6 @@ const AccountAddForm = () => {
     setPhone("");
     setDob(new Date());
   };
-
-  if (status === "success") {
-  }
-  console.log(status);
 
   const onFameChanged = (e) => {
     setFname(e.target.value);
@@ -84,74 +76,52 @@ const AccountAddForm = () => {
     setDob(date);
   };
 
+  useEffect(() => {
+    if (status === "success") {
+      setAlert({
+        open: true,
+        text: message,
+        severity: "success",
+      });
+    } else if (status === "fail") {
+      setAlert({
+        open: true,
+        text: err,
+        severity: "error",
+      });
+    }
+    dispatch(updateStatus("idle"));
+  }, [status]);
+
+  const handleClose = (e, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlert({ open: false });
+  };
+
   return (
-    // <React.Fragment>
-    //   <CssBaseline />
-    //   <h1>Register Form</h1>
-    //   <h3>{message}</h3>
-    //   <div>
-    //     <label>First Name</label>
-    //     <input
-    //       type="text"
-    //       value={fname}
-    //       onChange={(e) => setFname(e.target.value)}
-    //     />
-    //   </div>
-    //   <div>
-    //     <label>Last Name</label>
-    //     <input
-    //       type="text"
-    //       value={lname}
-    //       onChange={(e) => setLname(e.target.value)}
-    //     />
-    //   </div>
-    //   <div>
-    //     <label>Email</label>
-    //     <input
-    //       type="text"
-    //       value={email}
-    //       onChange={(e) => setEmail(e.target.value)}
-    //     />
-    //   </div>
-    //   <div>
-    //     <label>Password</label>{" "}
-    //     <input
-    //       type="password"
-    //       value={password}
-    //       onChange={(e) => setPassword(e.target.value)}
-    //     />
-    //   </div>
-
-    //   <div>
-    //     <label>Phone Number</label>
-    //     <input
-    //       type="text"
-    //       value={phone}
-    //       onChange={(e) => setPhone(e.target.value)}
-    //     />
-    //   </div>
-
-    //   <div>
-    //     <DatePicker
-    //       selected={dob}
-    //       onChange={(date) => setDob(date)}
-    //       maxDate={new Date()}
-    //       showMonthDropdown
-    //       showYearDropdown
-    //       dropdownMode="select"
-    //       placeholderText="enter your birth day"
-    //     />
-    //   </div>
-
-    //   <button onClick={onSendData}>Confirm</button>
-    // </React.Fragment>
     <React.Fragment>
-      {alert}
       <Container component="main" maxWidth="xs">
+        <Snackbar
+          open={alert.open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          TransitionComponent={Slide}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        >
+          <Alert
+            onClose={handleClose}
+            severity={alert.severity}
+            sx={{ width: "100%" }}
+          >
+            {alert.text}
+          </Alert>
+        </Snackbar>
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 16,
+            marginTop: 6,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",

@@ -6,7 +6,7 @@ const initialState = {
   token: "",
   user: {},
   isLogged: false,
-  error: null,
+  err: null,
   message: "",
 };
 
@@ -39,11 +39,17 @@ const accountSlice = createSlice({
       state.status = "loading";
     },
     [signupAccount.fulfilled]: (state, action) => {
-      state.status = "success";
-      state.message = action.payload.message;
+      if (!action.payload.err) {
+        state.status = "success";
+        state.message = action.payload.message;
+      } else {
+        state.status = "fail";
+        state.err = action.payload.err;
+      }
     },
     [signupAccount.rejected]: (state, action) => {
       state.status = "fail";
+      state.message = "something error at back-end";
     },
     [signinAccount.pending]: (state, action) => {
       state.loading = true;
