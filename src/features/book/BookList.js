@@ -14,22 +14,19 @@ import { CssBaseline } from "@material-ui/core";
 
 const BookList = () => {
   const dispatch = useDispatch();
-  const { bookList } = useSelector((state) => state.book);
-  const { isLogged } = useSelector((state) => state.account);
-
-  useEffect(() => {
-    dispatch(getAllBook());
-  }, [dispatch]);
+  const { bookList, message } = useSelector((state) => state.book);
+  const { isLogged, token } = useSelector((state) => state.account);
 
   if (isLogged === false) {
     console.log(isLogged);
     return <Redirect to="/login" />;
   }
-  // const renderBook = bookList.map((items, index) => console.log(items));
+
+  useEffect(() => {
+    dispatch(getAllBook(token));
+  }, [dispatch]);
+
   const renderBook = bookList.map((items) => (
-    // <article className="renderBook" key={items.id_book}>
-    //   <h3>{items.title}</h3>
-    // </article>
     <Card className="cardBook" key={items.id_book}>
       <CardActionArea>
         <CardContent>
@@ -52,28 +49,11 @@ const BookList = () => {
     </Card>
   ));
 
-  // const renderBook = bookList.map((items, index) =>
-  //   // (
-  //   //   <article className="articlaer" key={index}>
-  //   //     <h3>{items.title}</h3>
-  //   //   </article>
-  //   // )
-  //   {
-  //     console.log(index);
-  //   }
-  // );
-  // if (Array.isArray(bookList)) {
-  //   // console.log(bookList);
-  //   const renderBook = bookList.map((items) => {
-  //     <li>{items.title}</li>;
-  //   });
-  // }
-
   return (
     <React.Fragment>
       <CssBaseline />
       <h2>Book!!!</h2>
-      {renderBook}
+      {bookList.length > 0 ? renderBook : <h1>{message}</h1>}
     </React.Fragment>
   );
 };

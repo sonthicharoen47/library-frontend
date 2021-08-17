@@ -60,6 +60,10 @@ const accountSlice = createSlice({
       state.loading = false;
       state.isLogged = true;
     },
+    [signinAccount.rejected]: (state, action) => {
+      state.isLogged = false;
+      state.loading = false;
+    },
   },
 });
 

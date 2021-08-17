@@ -22,6 +22,18 @@ const LoginForm = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [helpText, setHelpText] = useState({
+    email: "",
+    password: "",
+  });
+  const [emailValidate, setEmailValidate] = useState({
+    helpText: "",
+    error: false,
+  });
+  const [passwordValidate, setPasswordValidate] = useState({
+    helpText: "",
+    error: false,
+  });
 
   const onEmailChanged = (e) => {
     setEmail(e.target.value);
@@ -33,9 +45,30 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(signinAccount({ email, password }));
-    setEmail("");
-    setPassword("");
+    if (email && password) {
+      dispatch(signinAccount({ email, password }));
+      setEmail("");
+      setPassword("");
+    } else if (!email && !password) {
+      setEmailValidate({
+        helpText: "email is Require!",
+        error: true,
+      });
+      setPasswordValidate({
+        helpText: "password is Require!",
+        error: true,
+      });
+    } else if (!email) {
+      setEmailValidate({
+        helpText: "email is Require!",
+        error: true,
+      });
+    } else if (!password) {
+      setPasswordValidate({
+        helpText: "password is Require!",
+        error: true,
+      });
+    }
   };
 
   if (isLogged === true) {
@@ -76,6 +109,8 @@ const LoginForm = () => {
             autoFocus
             value={email}
             onChange={onEmailChanged}
+            helperText={emailValidate.helpText}
+            error={emailValidate.error}
           />
           <TextField
             margin="normal"
@@ -88,6 +123,8 @@ const LoginForm = () => {
             autoComplete="current-password"
             value={password}
             onChange={onPasswordChanged}
+            helperText={passwordValidate.helpText}
+            error={passwordValidate.error}
           />
           <Button
             type="submit"

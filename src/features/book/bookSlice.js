@@ -1,14 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getApi } from "../../api/bookApi";
 
-export const getAllBook = createAsyncThunk("getAllBook", async () => {
-  const res = await getApi("/book/findAll");
+export const getAllBook = createAsyncThunk("getAllBook", async (token) => {
+  const res = await getApi("/book/findAll", token);
   return res;
 });
 
 const initialState = {
   bookList: [],
   loading: false,
+  message: "",
 };
 
 const bookSlice = createSlice({
@@ -19,8 +20,12 @@ const bookSlice = createSlice({
     [getAllBook.pending]: (state, action) => {
       state.loading = true;
     },
-    [getAllBook.fulfilled]: (state, { payload }) => {
-      state.bookList = payload;
+    [getAllBook.fulfilled]: (state, action) => {
+      state.bookList = action.payload;
+      state.loading = false;
+    },
+    [getAllBook.rejected]: (state, action) => {
+      state.message = "can not fetch data!";
       state.loading = false;
     },
   },
