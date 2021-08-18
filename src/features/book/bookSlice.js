@@ -7,13 +7,14 @@ export const getAllBook = createAsyncThunk("getAllBook", async (token) => {
 });
 
 const initialState = {
-  bookList: [],
+  booksList: [],
   loading: false,
   message: "",
+  bookId: "",
 };
 
-const bookSlice = createSlice({
-  name: "book",
+const booksSlice = createSlice({
+  name: "books",
   initialState,
   reducers: {},
   extraReducers: {
@@ -21,7 +22,7 @@ const bookSlice = createSlice({
       state.loading = true;
     },
     [getAllBook.fulfilled]: (state, action) => {
-      state.bookList = action.payload;
+      state.booksList = action.payload;
       state.loading = false;
     },
     [getAllBook.rejected]: (state, action) => {
@@ -32,4 +33,4 @@ const bookSlice = createSlice({
 });
 
 // export const {} = bookSlice.actions;
-export default bookSlice.reducer;
+export default booksSlice.reducer;

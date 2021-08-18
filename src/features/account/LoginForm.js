@@ -18,14 +18,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { isLogged } = useSelector((state) => state.account);
+  const { isLogged } = useSelector((state) => state.accounts);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [helpText, setHelpText] = useState({
-    email: "",
-    password: "",
-  });
   const [emailValidate, setEmailValidate] = useState({
     helpText: "",
     error: false,

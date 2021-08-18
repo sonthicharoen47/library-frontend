@@ -28,7 +28,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const AccountAddForm = () => {
   const dispatch = useDispatch();
-  const { message, status, err } = useSelector((state) => state.account);
+  const { message, status, err } = useSelector((state) => state.accounts);
 
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");

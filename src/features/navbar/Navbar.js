@@ -1,7 +1,4 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-//import { Link, Redirect } from "react-router-dom";
-import { logOut } from "../account/accountSlice";
 //css
 import {
   AppBar,
@@ -13,13 +10,6 @@ import {
 } from "@material-ui/core";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
-  const { isLogged } = useSelector((state) => state.account);
-
-  const onLogOut = () => {
-    dispatch(logOut());
-  };
-
   return (
     <React.Fragment>
       <CssBaseline />

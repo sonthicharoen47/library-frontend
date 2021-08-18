@@ -11,11 +11,13 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Redirect } from "react-router-dom";
 import { CssBaseline } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 const BookList = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
-  const { bookList, message } = useSelector((state) => state.book);
-  const { isLogged, token } = useSelector((state) => state.account);
+  const { booksList, message } = useSelector((state) => state.books);
+  const { isLogged, token } = useSelector((state) => state.accounts);
 
   if (isLogged === false) {
     console.log(isLogged);
@@ -26,15 +28,12 @@ const BookList = () => {
     dispatch(getAllBook(token));
   }, [dispatch]);
 
-  const renderBook = bookList.map((items) => (
+  const renderBook = booksList.map((items) => (
     <Card className="cardBook" key={items.id_book}>
       <CardActionArea>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {items.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {items.description}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -42,8 +41,11 @@ const BookList = () => {
         <Button size="small" color="primary">
           Add
         </Button>
-        <Button size="small" color="primary">
-          Learn More
+        <Button
+          type="button"
+          onClick={() => history.push("book/get/me", { bookId: items.id_book })}
+        >
+          more
         </Button>
       </CardActions>
     </Card>
@@ -53,7 +55,7 @@ const BookList = () => {
     <React.Fragment>
       <CssBaseline />
       <h2>Book!!!</h2>
-      {bookList.length > 0 ? renderBook : <h1>{message}</h1>}
+      {booksList.length > 0 ? renderBook : <h1>{message}</h1>}
     </React.Fragment>
   );
 };

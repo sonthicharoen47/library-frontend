@@ -20,8 +20,8 @@ export const signinAccount = createAsyncThunk("signinaccount", async (body) => {
   return res;
 });
 
-const accountSlice = createSlice({
-  name: "account",
+const accountsSlice = createSlice({
+  name: "accounts",
   initialState,
   reducers: {
     logOut: (state, action) => {
@@ -67,5 +67,5 @@ const accountSlice = createSlice({
   },
 });
 
-export const { logOut, updateStatus } = accountSlice.actions;
-export default accountSlice.reducer;
+export const { logOut, updateStatus } = accountsSlice.actions;
+export default accountsSlice.reducer;
