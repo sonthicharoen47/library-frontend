@@ -7,11 +7,12 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginForm from "./features/account/LoginForm";
 import BookList from "./features/book/BookList";
 import SingleBookPage from "./features/book/SingleBookPage";
+import BookSelected from "./features/book/BookSelected";
 
 function App() {
   return (
     <Router>
-      <Navbar />
+      <Navbar /> 
       <div className="App">
         <Switch>
           <Route
@@ -27,6 +28,7 @@ function App() {
           <Route exact path="/register" component={AccountAddForm} />
           <Route exact path="/book" component={BookList} />
           <Route exact path="/book/get/me" component={SingleBookPage} />
+          <Route exact path="/book/selected" component={BookSelected} />
         </Switch>
       </div>
     </Router>

@@ -1,17 +1,22 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBook } from "./bookSlice";
+import { getAllBook, booksSelected } from "./bookSlice";
+import { useHistory, Redirect } from "react-router-dom";
+import BookCard from "./BookCard";
+
 //css import
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-// import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { Redirect } from "react-router-dom";
-import { CssBaseline } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Typography,
+  CssBaseline,
+  Container,
+  Box,
+  Grid,
+} from "@material-ui/core";
 
 const BookList = () => {
   const history = useHistory();
@@ -29,16 +34,23 @@ const BookList = () => {
   }, [dispatch]);
 
   const renderBook = booksList.map((items) => (
-    <Card className="cardBook" key={items.id_book}>
-      <CardActionArea>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {items.title}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+    <Card className="cardBook" key={items.id_book} sc={{ maxWidth: 345 }}>
+      <CardMedia
+        sx={{ height: 140 }}
+        image={require("../../picture/harry_the_prison.jpeg")}
+        title="img_1"
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {items.title}
+        </Typography>
+      </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => dispatch(booksSelected(items))}
+        >
           Add
         </Button>
         <Button
@@ -53,9 +65,21 @@ const BookList = () => {
 
   return (
     <React.Fragment>
-      <CssBaseline />
-      <h2>Book!!!</h2>
-      {booksList.length > 0 ? renderBook : <h1>{message}</h1>}
+      <Container>
+        <CssBaseline /> <h2>Book!!!</h2>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {/* {booksList.length > 0 ? renderBook : <h1>{message}</h1>} */}
+          {booksList.map((book) => (
+            <Grid item key={book.id_book} xs={2} sm={4} md={4}>
+              <BookCard book={book} />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </React.Fragment>
   );
 };

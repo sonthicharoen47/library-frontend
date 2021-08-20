@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 //css
 import {
   AppBar,
@@ -6,10 +8,23 @@ import {
   Toolbar,
   Typography,
   Button,
-  Link,
 } from "@material-ui/core";
 
 const Navbar = () => {
+  const { isLogged } = useSelector((state) => state.accounts);
+  const [nonLogInView, setNonLogInView] = useState("visible");
+  const [logInView, setLogInView] = useState("hidden");
+
+  useEffect(() => {
+    if (isLogged === true) {
+      setNonLogInView("hidden");
+      setLogInView("visible");
+    } else {
+      setNonLogInView("visible");
+      setLogInView("hidden");
+    }
+  }, [isLogged]);
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -24,36 +39,22 @@ const Navbar = () => {
             Library Online
           </Typography>
           <nav>
-            <Link
-              variant="button"
-              color="text.primary"
-              href="#"
-              sx={{ my: 1, mx: 1.5 }}
-            >
-              Features
-            </Link>
-            <Link
-              variant="button"
-              color="text.primary"
-              href="#"
-              sx={{ my: 1, mx: 1.5 }}
-            >
-              Enterprise
-            </Link>
-            <Link
-              variant="button"
-              color="text.primary"
-              href="/profile"
-              sx={{ my: 1, mx: 1.5 }}
-            >
-              Profile
-            </Link>
+            <Link to="/book/selected">BookSelected</Link>
           </nav>
-          <Button href="/login" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-            Login
-          </Button>
-          <Button href="/logout" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
+
+          <Button
+            href="/logout"
+            variant="outlined"
+            sx={{ my: 1, mx: 1.5, visibility: logInView }}
+          >
             Logout
+          </Button>
+          <Button
+            href="/login"
+            variant="outlined"
+            sx={{ my: 1, mx: 1.5, visibility: nonLogInView }}
+          >
+            Login
           </Button>
         </Toolbar>
       </AppBar>

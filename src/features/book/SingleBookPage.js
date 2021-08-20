@@ -1,6 +1,7 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
+import { booksSelected } from "./bookSlice";
 //css
 import { Container, Box, CssBaseline, Grid, Button } from "@material-ui/core";
 
@@ -8,6 +9,8 @@ const SingleBookPage = () => {
   const location = useLocation();
   const bookId = location.state.bookId;
   const history = useHistory();
+
+  const dispatch = useDispatch();
 
   const book = useSelector((state) =>
     state.books.booksList.find((items) => items.id_book === bookId)
@@ -41,7 +44,9 @@ const SingleBookPage = () => {
             <h3>{book.description}</h3>
           </Grid>
         </Grid>
-        <Button type="button">Add</Button>
+        <Button type="button" onClick={() => dispatch(booksSelected(book))}>
+          Add
+        </Button>
         <Button type="button" onClick={() => history.goBack()}>
           Back
         </Button>

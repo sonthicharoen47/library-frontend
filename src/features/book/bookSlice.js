@@ -10,13 +10,28 @@ const initialState = {
   booksList: [],
   loading: false,
   message: "",
-  bookId: "",
+  selectedList: [],
 };
 
 const booksSlice = createSlice({
   name: "books",
   initialState,
-  reducers: {},
+  reducers: {
+    booksSelected(state, action) {
+      let findDupObj = state.selectedList.find(
+        (items) => items.id_book === action.payload.id_book
+      );
+      if (!findDupObj) {
+        state.selectedList.push(action.payload);
+      }
+    },
+    deletedSelected(state, action) {
+      let x = state.selectedList.filter(
+        (items) => items.id_book !== action.payload.id_book
+      );
+      state.selectedList = x;
+    },
+  },
   extraReducers: {
     [getAllBook.pending]: (state, action) => {
       state.loading = true;
@@ -32,5 +47,5 @@ const booksSlice = createSlice({
   },
 });
 
-// export const {} = bookSlice.actions;
+export const { booksSelected, deletedSelected } = booksSlice.actions;
 export default booksSlice.reducer;
