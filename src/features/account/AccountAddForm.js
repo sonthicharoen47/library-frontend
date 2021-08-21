@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupAccount, updateStatus } from "./accountSlice";
 import DatePicker from "react-datepicker";
+import { useHistory } from "react-router-dom";
 
 import "react-datepicker/dist/react-datepicker.css";
 //css
@@ -26,8 +27,11 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+const regex = /^[0-9\b]+$/;
+
 const AccountAddForm = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { message, status, err } = useSelector((state) => state.accounts);
 
   const [fname, setFname] = useState("");
@@ -70,7 +74,9 @@ const AccountAddForm = () => {
     setPassword(e.target.value);
   };
   const onPhoneChanged = (e) => {
-    setPhone(e.target.value);
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      setPhone(e.target.value);
+    }
   };
   const onDobChanged = (date) => {
     setDob(date);
@@ -83,6 +89,9 @@ const AccountAddForm = () => {
         text: message,
         severity: "success",
       });
+      setTimeout(() => {
+        history.push("/login");
+      }, 2000);
     } else if (status === "fail") {
       setAlert({
         open: true,
@@ -215,7 +224,9 @@ const AccountAddForm = () => {
                   name="phone"
                   autoComplete="phone"
                   value={phone}
+                  type="tel"
                   onChange={onPhoneChanged}
+                  inputProps={{ maxLength: 10, pattern: "[0-9]*" }}
                 />
               </Grid>
               <Grid item xs={12}></Grid>

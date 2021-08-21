@@ -1,27 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBook, booksSelected } from "./bookSlice";
-import { useHistory, Redirect } from "react-router-dom";
+import { getAllBook } from "./bookSlice";
+import { Redirect } from "react-router-dom";
 import BookCard from "./BookCard";
 
 //css import
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Button,
-  Typography,
-  CssBaseline,
-  Container,
-  Box,
-  Grid,
-} from "@material-ui/core";
+import { CssBaseline, Container, Grid } from "@material-ui/core";
 
 const BookList = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const { booksList, message } = useSelector((state) => state.books);
+  const { booksList } = useSelector((state) => state.books);
   const { isLogged, token } = useSelector((state) => state.accounts);
 
   if (isLogged === false) {
@@ -32,36 +20,6 @@ const BookList = () => {
   useEffect(() => {
     dispatch(getAllBook(token));
   }, [dispatch]);
-
-  const renderBook = booksList.map((items) => (
-    <Card className="cardBook" key={items.id_book} sc={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image={require("../../picture/harry_the_prison.jpeg")}
-        title="img_1"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {items.title}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button
-          size="small"
-          color="primary"
-          onClick={() => dispatch(booksSelected(items))}
-        >
-          Add
-        </Button>
-        <Button
-          type="button"
-          onClick={() => history.push("book/get/me", { bookId: items.id_book })}
-        >
-          more
-        </Button>
-      </CardActions>
-    </Card>
-  ));
 
   return (
     <React.Fragment>
