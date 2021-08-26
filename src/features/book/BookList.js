@@ -12,14 +12,15 @@ const BookList = () => {
   const { booksList } = useSelector((state) => state.books);
   const { isLogged, token } = useSelector((state) => state.accounts);
 
+  useEffect(() => {
+    dispatch(getAllBook(token));
+  }, [dispatch, token]);
+
   if (isLogged === false) {
     console.log(isLogged);
     return <Redirect to="/login" />;
+  } else {
   }
-
-  useEffect(() => {
-    dispatch(getAllBook(token));
-  }, [dispatch]);
 
   return (
     <React.Fragment>

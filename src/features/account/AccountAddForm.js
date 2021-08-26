@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupAccount, updateStatus } from "./accountSlice";
-import DatePicker from "react-datepicker";
 import { useHistory } from "react-router-dom";
 
-import "react-datepicker/dist/react-datepicker.css";
 //css
 import {
   CssBaseline,
@@ -18,6 +16,8 @@ import {
   Container,
   Snackbar,
 } from "@material-ui/core";
+import { LocalizationProvider, DatePicker } from "@material-ui/lab";
+import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import MuiAlert from "@material-ui/core/Alert";
@@ -100,7 +100,7 @@ const AccountAddForm = () => {
       });
     }
     dispatch(updateStatus("idle"));
-  }, [status]);
+  }, [dispatch, status, err, history, message]);
 
   const handleClose = (e, reason) => {
     if (reason === "clickaway") {
@@ -204,15 +204,17 @@ const AccountAddForm = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DatePicker
-                  selected={dob}
-                  maxDate={new Date()}
-                  showMonthDropdown
-                  showYearDropdown
-                  dropdownMode="select"
-                  placeholderText="enter your birth day"
-                  onChange={onDobChanged}
-                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    disableFuture
+                    label="Date of birth"
+                    openTo="year"
+                    views={["year", "month", "day"]}
+                    value={dob}
+                    onChange={onDobChanged}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField

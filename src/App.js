@@ -1,9 +1,8 @@
-import React, { useEffect} from "react";
+import React from "react";
 import "./App.css";
 import AccountAddForm from "./features/account/AccountAddForm";
 import Navbar from "./features/navbar/Navbar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 import LoginForm from "./features/account/LoginForm";
 import BookList from "./features/book/BookList";
@@ -11,14 +10,6 @@ import SingleBookPage from "./features/book/SingleBookPage";
 import BookSelected from "./features/book/BookSelected";
 
 function App() {
-  const { isLogged } = useSelector((state) => state.accounts);
-
-  useEffect(() => {
-    if(isLogged === false) {
-      
-    }
-  },[])
-
   return (
     <Router>
       <Navbar />

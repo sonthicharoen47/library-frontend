@@ -1,8 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getApi } from "../../api/bookApi";
+import { postRentApi } from "../../api/rentApi";
 
 export const getAllBook = createAsyncThunk("getAllBook", async (token) => {
   const res = await getApi("/book/findAll", token);
+  return res;
+});
+
+export const postRentBook = createAsyncThunk("postRentBook", async (params) => {
+  const res = await postRentApi("/rentDetail/add", params);
   return res;
 });
 
@@ -42,6 +48,17 @@ const booksSlice = createSlice({
     },
     [getAllBook.rejected]: (state, action) => {
       state.message = "can not fetch data!";
+      state.loading = false;
+    },
+    [postRentBook.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [postRentBook.fulfilled]: (state, action) => {
+      state.message = action.payload;
+      state.loading = false;
+    },
+    [postRentBook.rejected]: (state, action) => {
+      state.message = "rent book fail!";
       state.loading = false;
     },
   },

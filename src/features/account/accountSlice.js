@@ -11,6 +11,7 @@ const initialState = {
 };
 
 export const signupAccount = createAsyncThunk("signupaccount", async (body) => {
+  console.log(body);
   const res = await registerAccount("/account/register", body);
   return res;
 });
