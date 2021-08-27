@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBook } from "./bookSlice";
+import { getAllBook, updateBookStatus } from "./bookSlice";
 import { Redirect } from "react-router-dom";
 import BookCard from "./BookCard";
 
@@ -9,17 +9,17 @@ import { CssBaseline, Container, Grid } from "@material-ui/core";
 
 const BookList = () => {
   const dispatch = useDispatch();
-  const { booksList } = useSelector((state) => state.books);
+  const { booksList, status } = useSelector((state) => state.books);
   const { isLogged, token } = useSelector((state) => state.accounts);
 
   useEffect(() => {
-    dispatch(getAllBook(token));
+    dispatch(getAllBook(token)).then(() => {
+      dispatch(updateBookStatus("idle"));
+    });
   }, [dispatch, token]);
-
+  console.log(status);
   if (isLogged === false) {
-    console.log(isLogged);
     return <Redirect to="/login" />;
-  } else {
   }
 
   return (

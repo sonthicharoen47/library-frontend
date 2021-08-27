@@ -45,9 +45,6 @@ const Navbar = () => {
           <Button href="/logout" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
             Logout
           </Button>
-          <Button href="/login" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-            Login
-          </Button>
         </Toolbar>
       </AppBar>
     </React.Fragment>

@@ -14,9 +14,10 @@ export const postRentBook = createAsyncThunk("postRentBook", async (params) => {
 
 const initialState = {
   booksList: [],
-  loading: false,
   message: "",
   selectedList: [],
+  status: "idle",
+  err: null,
 };
 
 const booksSlice = createSlice({
@@ -37,32 +38,41 @@ const booksSlice = createSlice({
       );
       state.selectedList = x;
     },
+    updateBookStatus(state, action) {
+      state.status = action.payload;
+    },
   },
   extraReducers: {
     [getAllBook.pending]: (state, action) => {
-      state.loading = true;
+      state.status = "loading";
     },
     [getAllBook.fulfilled]: (state, action) => {
       state.booksList = action.payload;
-      state.loading = false;
+      state.status = "success";
     },
     [getAllBook.rejected]: (state, action) => {
       state.message = "can not fetch data!";
-      state.loading = false;
+      state.status = "fail";
     },
     [postRentBook.pending]: (state, action) => {
-      state.loading = true;
+      state.status = "loading";
     },
     [postRentBook.fulfilled]: (state, action) => {
-      state.message = action.payload;
-      state.loading = false;
+      if (!action.payload.err) {
+        state.message = action.payload.message;
+        state.status = "success";
+      } else {
+        state.err = action.payload.err;
+        state.status = "fail";
+      }
     },
     [postRentBook.rejected]: (state, action) => {
-      state.message = "rent book fail!";
-      state.loading = false;
+      state.err = action.payload.err;
+      state.status = "fail";
     },
   },
 });
 
-export const { booksSelected, deletedSelected } = booksSlice.actions;
+export const { booksSelected, deletedSelected, updateBookStatus } =
+  booksSlice.actions;
 export default booksSlice.reducer;
