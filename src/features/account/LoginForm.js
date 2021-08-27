@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signinAccount } from "./accountSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 //css
 import {
   Button,
@@ -13,12 +13,20 @@ import {
   TextField,
   Link,
   Container,
+  Snackbar,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import MuiAlert from "@material-ui/core/Alert";
+import Slide from "@material-ui/core/Slide";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { isLogged } = useSelector((state) => state.accounts);
+  const history = useHistory();
+  const { isLogged, token, status } = useSelector((state) => state.accounts);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,6 +37,11 @@ const LoginForm = () => {
   const [passwordValidate, setPasswordValidate] = useState({
     helpText: "",
     error: false,
+  });
+  const [alert, setAlert] = useState({
+    open: false,
+    text: "",
+    severity: "",
   });
 
   const onEmailChanged = (e) => {
@@ -42,7 +55,32 @@ const LoginForm = () => {
     e.preventDefault();
 
     if (email && password) {
-      dispatch(signinAccount({ email, password }));
+      dispatch(signinAccount({ email, password })).then((result) => {
+        if (result.payload.token) {
+          setAlert({
+            open: true,
+            text: "login success",
+            severity: "success",
+          });
+          setTimeout(() => {
+            history.push("/book");
+          }, 1000);
+        } else {
+          setAlert({
+            open: true,
+            text: "email or password was wrong!",
+            severity: "error",
+          });
+          setEmailValidate({
+            helpText: "email is Require!",
+            error: true,
+          });
+          setPasswordValidate({
+            helpText: "password is Require!",
+            error: true,
+          });
+        }
+      });
       setEmail("");
       setPassword("");
     } else if (!email && !password) {
@@ -67,13 +105,31 @@ const LoginForm = () => {
     }
   };
 
-  if (isLogged === true) {
-    return <Redirect to="/book" />;
-  }
+  const handleClose = (e, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlert({ open: false });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        TransitionComponent={Slide}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
+          {alert.text}
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           marginTop: 6,

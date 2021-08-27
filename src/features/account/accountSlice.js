@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { registerAccount } from "../../api/accountApi";
+import { postAccountApi, getAccountApi } from "../../api/accountApi";
 
 const initialState = {
   status: "idle",
@@ -12,12 +12,17 @@ const initialState = {
 
 export const signupAccount = createAsyncThunk("signupaccount", async (body) => {
   console.log(body);
-  const res = await registerAccount("/account/register", body);
+  const res = await postAccountApi("/account/register", body);
   return res;
 });
 
 export const signinAccount = createAsyncThunk("signinaccount", async (body) => {
-  const res = await registerAccount("/login", body);
+  const res = await postAccountApi("/login", body);
+  return res;
+});
+
+export const signoutAccount = createAsyncThunk("signoutaccount", async () => {
+  const res = await getAccountApi("/logout");
   return res;
 });
 
@@ -25,12 +30,7 @@ const accountsSlice = createSlice({
   name: "accounts",
   initialState,
   reducers: {
-    logOut: (state, action) => {
-      state.token = "";
-      state.user = {};
-      state.isLogged = false;
-    },
-    updateStatus: (state, action) => {
+    updateAccountStatus: (state, action) => {
       state.status = action.payload;
     },
   },
@@ -65,8 +65,14 @@ const accountsSlice = createSlice({
       state.isLogged = false;
       state.loading = false;
     },
+    [signoutAccount.fulfilled]: (state, action) => {
+      state.token = "";
+      state.user = {};
+      state.isLogged = false;
+      state.message = action.payload;
+    },
   },
 });
 
-export const { logOut, updateStatus } = accountsSlice.actions;
+export const { updateAccountStatus } = accountsSlice.actions;
 export default accountsSlice.reducer;

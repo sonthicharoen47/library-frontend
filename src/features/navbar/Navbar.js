@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 //css
 import {
   AppBar,
@@ -10,17 +11,28 @@ import {
   Button,
 } from "@material-ui/core";
 
+import { signoutAccount } from "../account/accountSlice";
+
 const Navbar = () => {
-  const { isLogged } = useSelector((state) => state.accounts);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { token } = useSelector((state) => state.accounts);
   const [logInView, setLogInView] = useState("hidden");
 
+  // useEffect(()=)
+
   useEffect(() => {
-    if (isLogged === true) {
+    if (token) {
       setLogInView("visible");
     } else {
       setLogInView("hidden");
     }
-  }, [isLogged]);
+  }, [token]);
+
+  // const handleLogOut = () => {
+  //   dispatch(signoutAccount());
+  //   history.push("/login");
+  // };
 
   return (
     <React.Fragment>
@@ -42,7 +54,13 @@ const Navbar = () => {
             <Link to="/book/selected">BookSelected</Link>
           </nav>
 
-          <Button href="/logout" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
+          <Button
+            href="/login"
+            variant="outlined"
+            sx={{ my: 1, mx: 1.5 }}
+            // onClick={handleLogOut}
+            onClick={() => dispatch(signoutAccount())}
+          >
             Logout
           </Button>
         </Toolbar>

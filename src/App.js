@@ -27,7 +27,7 @@ function App() {
           <Route exact path="/login" component={LoginForm} />
           <Route exact path="/register" component={AccountAddForm} />
           <Route exact path="/book" component={BookList} />
-          <Route exact path="/book/get/me" component={SingleBookPage} />
+          <Route exact path="/book/me" component={SingleBookPage} />
           <Route exact path="/book/selected" component={BookSelected} />
         </Switch>
       </div>

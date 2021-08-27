@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupAccount, updateStatus } from "./accountSlice";
 import { useHistory } from "react-router-dom";
-
+import { updateAccountStatus } from "./accountSlice";
 //css
 import {
   CssBaseline,
@@ -50,7 +50,11 @@ const AccountAddForm = () => {
     e.preventDefault();
 
     if (fname && lname && email && password && phone) {
-      dispatch(signupAccount({ fname, lname, email, password, phone, dob }));
+      dispatch(
+        signupAccount({ fname, lname, email, password, phone, dob })
+      ).then(() => {
+        dispatch(updateAccountStatus("idle"));
+      });
     }
 
     setFname("");
@@ -99,7 +103,6 @@ const AccountAddForm = () => {
         severity: "error",
       });
     }
-    dispatch(updateStatus("idle"));
   }, [dispatch, status, err, history, message]);
 
   const handleClose = (e, reason) => {
@@ -210,6 +213,7 @@ const AccountAddForm = () => {
                     label="Date of birth"
                     openTo="year"
                     views={["year", "month", "day"]}
+                    maxDate={new Date()}
                     value={dob}
                     onChange={onDobChanged}
                     renderInput={(params) => <TextField {...params} />}

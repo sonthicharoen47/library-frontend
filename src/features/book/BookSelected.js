@@ -59,11 +59,11 @@ const BookSelected = () => {
     }
   }, [dispatch, status, err, history, message]);
 
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState("");
   //create a datepicker to choose end date for rent books.
   const handleRent = () => {
     const body = {
-      end_date: endDate,
+      endDate: endDate,
       bookRent: selectedList,
     };
     try {
@@ -111,6 +111,7 @@ const BookSelected = () => {
         </Snackbar>
         <h1>Book Selected!!!!</h1>
         {selectedList.length > 0 ? renderedSelected : <h1>empty book</h1>}
+        <br />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             disablePast

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getApi } from "../../api/bookApi";
+import { getApi, postApi } from "../../api/bookApi";
 import { postRentApi } from "../../api/rentApi";
 
 export const getAllBook = createAsyncThunk("getAllBook", async (token) => {
@@ -9,6 +9,11 @@ export const getAllBook = createAsyncThunk("getAllBook", async (token) => {
 
 export const postRentBook = createAsyncThunk("postRentBook", async (params) => {
   const res = await postRentApi("/rentDetail/add", params);
+  return res;
+});
+
+export const postBookApi = createAsyncThunk("postbookapi", async (params) => {
+  const res = await postApi("/book/get/me", params);
   return res;
 });
 
