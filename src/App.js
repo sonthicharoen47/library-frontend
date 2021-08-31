@@ -28,9 +28,9 @@ function App() {
           />
           <Route exact path="/login" component={LoginForm} />
           <Route exact path="/register" component={AccountAddForm} />
-          <Route exact path="/book" component={BookList} />
-          <Route exact path="/book/me" component={SingleBookPage} />
-          <Route exact path="/book/selected" component={BookSelected} />
+          <Route exact path="/dashboard" component={BookList} />
+          <Route exact path="/dashboard/me" component={SingleBookPage} />
+          <Route exact path="/dashboard/selected" component={BookSelected} />
           <Route exact path="/orderhistory" component={OrderHistoryList} />
           <Route
             exact

@@ -29,7 +29,7 @@ const BookCard = ({ book }) => {
           </Button>
           <Button
             size="small"
-            onClick={() => history.push("book/me", { bookId: book.id_book })}
+            onClick={() => history.push("dashboard/me", { bookId: book.id_book })}
           >
             More
           </Button>

@@ -63,7 +63,7 @@ const LoginForm = () => {
             severity: "success",
           });
           setTimeout(() => {
-            history.push("/book");
+            history.push("/dashboard");
           }, 1000);
         } else {
           setAlert({

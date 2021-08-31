@@ -19,8 +19,6 @@ const Navbar = () => {
   const { token } = useSelector((state) => state.accounts);
   const [logInView, setLogInView] = useState("hidden");
 
-  // useEffect(()=)
-
   useEffect(() => {
     if (token) {
       setLogInView("visible");
@@ -28,11 +26,6 @@ const Navbar = () => {
       setLogInView("hidden");
     }
   }, [token]);
-
-  // const handleLogOut = () => {
-  //   dispatch(signoutAccount());
-  //   history.push("/login");
-  // };
 
   return (
     <React.Fragment>
@@ -47,11 +40,13 @@ const Navbar = () => {
         }}
       >
         <Toolbar sx={{ flexWrap: "wrap" }}>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            Library Online
+          <Typography variant="h3" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+            <Button onClick={() => history.push("/dashboard")}>
+              Library Online
+            </Button>
           </Typography>
           <nav>
-            <Link to="/book/selected">BookSelected</Link>
+            <Link to="/dashboard/selected">BookSelected</Link>
             <Link to="/orderhistory">history</Link>
           </nav>
 
@@ -59,7 +54,6 @@ const Navbar = () => {
             href="/login"
             variant="outlined"
             sx={{ my: 1, mx: 1.5 }}
-            // onClick={handleLogOut}
             onClick={() => dispatch(signoutAccount())}
           >
             Logout

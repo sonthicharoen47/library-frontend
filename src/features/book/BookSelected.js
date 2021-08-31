@@ -49,7 +49,7 @@ const BookSelected = () => {
       });
       setTimeout(() => {
         dispatch(clearSelected());
-        history.push("/book");
+        history.push("/dashboard");
       }, 1000);
     } else if (status === "fail") {
       setAlert({
