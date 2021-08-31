@@ -17,9 +17,7 @@ const initialState = {
 const orderHistorysSlice = createSlice({
   name: "orderHistory",
   initialState,
-  reducers: {
-    
-  },
+  reducers: {},
   extraReducers: {
     [getOrderHistory.fulfilled]: (state, action) => {
       state.orderHistories = action.payload;
@@ -31,5 +29,5 @@ const orderHistorysSlice = createSlice({
   },
 });
 
-export const {  } = orderHistorysSlice.actions;
+export const {} = orderHistorysSlice.actions;
 export default orderHistorysSlice.reducer;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deletedSelected, postRentBook } from "./bookSlice";
+import { deletedSelected, postRentBook, clearSelected } from "./bookSlice";
 import { useHistory } from "react-router-dom";
 //css
 import {
@@ -48,8 +48,9 @@ const BookSelected = () => {
         severity: "success",
       });
       setTimeout(() => {
+        dispatch(clearSelected());
         history.push("/book");
-      }, 2000);
+      }, 1000);
     } else if (status === "fail") {
       setAlert({
         open: true,

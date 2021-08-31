@@ -46,6 +46,9 @@ const booksSlice = createSlice({
     updateBookStatus(state, action) {
       state.status = action.payload;
     },
+    clearSelected(state, action) {
+      state.selectedList = [];
+    },
   },
   extraReducers: {
     [getAllBook.pending]: (state, action) => {
@@ -78,6 +81,10 @@ const booksSlice = createSlice({
   },
 });
 
-export const { booksSelected, deletedSelected, updateBookStatus } =
-  booksSlice.actions;
+export const {
+  booksSelected,
+  deletedSelected,
+  updateBookStatus,
+  clearSelected,
+} = booksSlice.actions;
 export default booksSlice.reducer;
