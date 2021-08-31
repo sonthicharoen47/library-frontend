@@ -8,6 +8,8 @@ import LoginForm from "./features/account/LoginForm";
 import BookList from "./features/book/BookList";
 import SingleBookPage from "./features/book/SingleBookPage";
 import BookSelected from "./features/book/BookSelected";
+import OrderHistoryList from "./features/orderHistory/OrderHistoryList";
+import OrderHistorySelected from "./features/orderHistory/OrderHistorySelected";
 
 function App() {
   return (
@@ -29,6 +31,12 @@ function App() {
           <Route exact path="/book" component={BookList} />
           <Route exact path="/book/me" component={SingleBookPage} />
           <Route exact path="/book/selected" component={BookSelected} />
+          <Route exact path="/orderhistory" component={OrderHistoryList} />
+          <Route
+            exact
+            path="/orderhistory/date"
+            component={OrderHistorySelected}
+          />
         </Switch>
       </div>
     </Router>

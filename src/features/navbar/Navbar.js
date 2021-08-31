@@ -52,6 +52,7 @@ const Navbar = () => {
           </Typography>
           <nav>
             <Link to="/book/selected">BookSelected</Link>
+            <Link to="/orderhistory">history</Link>
           </nav>
 
           <Button
