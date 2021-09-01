@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { postAccountApi, getAccountApi } from "../../api/accountApi";
-
+import { getWithoutTokenApi, postWithoutTokenApi } from "../../api/publicApi";
 const initialState = {
   status: "idle",
   token: "",
@@ -10,18 +9,24 @@ const initialState = {
   message: "",
 };
 
-export const signupAccount = createAsyncThunk("signupaccount", async (body) => {
-  const res = await postAccountApi("/account/register", body);
-  return res;
-});
+export const signupAccount = createAsyncThunk(
+  "signupaccount",
+  async (params) => {
+    const res = await postWithoutTokenApi("/account/register", params);
+    return res;
+  }
+);
 
-export const signinAccount = createAsyncThunk("signinaccount", async (body) => {
-  const res = await postAccountApi("/login", body);
-  return res;
-});
+export const signinAccount = createAsyncThunk(
+  "signinaccount",
+  async (params) => {
+    const res = await postWithoutTokenApi("/login", params);
+    return res;
+  }
+);
 
 export const signoutAccount = createAsyncThunk("signoutaccount", async () => {
-  const res = await getAccountApi("/logout");
+  const res = await getWithoutTokenApi("/logout");
   return res;
 });
 

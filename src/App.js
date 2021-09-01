@@ -10,6 +10,7 @@ import SingleBookPage from "./features/book/SingleBookPage";
 import BookSelected from "./features/book/BookSelected";
 import OrderHistoryList from "./features/orderHistory/OrderHistoryList";
 import OrderHistorySelected from "./features/orderHistory/OrderHistorySelected";
+import AdminDashboard from "./features/admin/AdminDashboard";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             path="/orderhistory/date"
             component={OrderHistorySelected}
           />
+          <Route exact path="/admin/dashboard" component={AdminDashboard} />
         </Switch>
       </div>
     </Router>

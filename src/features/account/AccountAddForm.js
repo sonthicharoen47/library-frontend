@@ -50,9 +50,8 @@ const AccountAddForm = () => {
     e.preventDefault();
 
     if (fname && lname && email && password && phone) {
-      dispatch(
-        signupAccount({ fname, lname, email, password, phone, dob })
-      ).then(() => {
+      const body = { fname, lname, email, password, phone, dob };
+      dispatch(signupAccount({ body })).then(() => {
         dispatch(updateAccountStatus("idle"));
       });
     }

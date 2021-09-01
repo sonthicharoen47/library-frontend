@@ -55,7 +55,8 @@ const LoginForm = () => {
     e.preventDefault();
 
     if (email && password) {
-      dispatch(signinAccount({ email, password })).then((result) => {
+      const body = { email, password };
+      dispatch(signinAccount({ body })).then((result) => {
         if (result.payload.token) {
           setAlert({
             open: true,
@@ -63,7 +64,11 @@ const LoginForm = () => {
             severity: "success",
           });
           setTimeout(() => {
-            history.push("/dashboard");
+            if (result.payload.user.role === "admin") {
+              history.push("/admin/dashboard");
+            } else {
+              history.push("/dashboard");
+            }
           }, 1000);
         } else {
           setAlert({

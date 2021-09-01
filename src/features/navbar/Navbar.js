@@ -16,50 +16,89 @@ import { signoutAccount } from "../account/accountSlice";
 const Navbar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { token } = useSelector((state) => state.accounts);
+  const { user, isLogged, token } = useSelector((state) => state.accounts);
   const [logInView, setLogInView] = useState("hidden");
 
   useEffect(() => {
-    if (token) {
+    if (Object.entries(user).length > 0 && isLogged && token) {
       setLogInView("visible");
     } else {
       setLogInView("hidden");
     }
-  }, [token]);
+  }, [user, isLogged, token]);
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar
-        position="static"
-        color="default"
-        elevation={0}
-        sx={{
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-          visibility: logInView,
-        }}
-      >
-        <Toolbar sx={{ flexWrap: "wrap" }}>
-          <Typography variant="h3" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            <Button onClick={() => history.push("/dashboard")}>
-              Library Online
-            </Button>
-          </Typography>
-          <nav>
-            <Link to="/dashboard/selected">BookSelected</Link>
-            <Link to="/orderhistory">history</Link>
-          </nav>
+      {user && user.role === "user" ? (
+        <AppBar
+          position="static"
+          color="default"
+          elevation={0}
+          sx={{
+            bordetrBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            visibility: logInView,
+          }}
+        >
+          <Toolbar sx={{ flexWrap: "wrap" }}>
+            <Typography
+              variant="h3"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              <Button onClick={() => history.push("/dashboard")}>
+                Library Online
+              </Button>
+            </Typography>
+            <nav>
+              <Link to="/dashboard/selected">BookSelected</Link>
+              <Link to="/orderhistory">history</Link>
+            </nav>
 
-          <Button
-            href="/login"
-            variant="outlined"
-            sx={{ my: 1, mx: 1.5 }}
-            onClick={() => dispatch(signoutAccount())}
-          >
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
+            <Button
+              href="/login"
+              variant="outlined"
+              sx={{ my: 1, mx: 1.5 }}
+              onClick={() => dispatch(signoutAccount())}
+            >
+              Logout
+            </Button>
+          </Toolbar>
+        </AppBar>
+      ) : (
+        <AppBar
+          position="static"
+          color="default"
+          elevation={0}
+          sx={{
+            bordetrBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            visibility: logInView,
+          }}
+        >
+          <Toolbar sx={{ flexWrap: "wrap" }}>
+            <Typography
+              variant="h3"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              <Button onClick={() => history.push("/admin/dashboard")}>
+                Library Online
+              </Button>
+            </Typography>
+
+            <Button
+              href="/login"
+              variant="outlined"
+              sx={{ my: 1, mx: 1.5 }}
+              onClick={() => dispatch(signoutAccount())}
+            >
+              Logout
+            </Button>
+          </Toolbar>
+        </AppBar>
+      )}
     </React.Fragment>
   );
 };

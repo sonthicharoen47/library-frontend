@@ -13,7 +13,7 @@ const BookList = () => {
   const { isLogged, token } = useSelector((state) => state.accounts);
 
   useEffect(() => {
-    dispatch(getAllBook(token)).then(() => {
+    dispatch(getAllBook({ token })).then(() => {
       dispatch(updateBookStatus("idle"));
     });
   }, [dispatch, token]);

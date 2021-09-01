@@ -1,19 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getApi, postApi } from "../../api/bookApi";
-import { postRentApi } from "../../api/rentApi";
+import { getWithTokenApi, postWithTokenApi } from "../../api/publicApi";
 
-export const getAllBook = createAsyncThunk("getAllBook", async (token) => {
-  const res = await getApi("/book/findAll", token);
+export const getAllBook = createAsyncThunk("getAllBook", async (params) => {
+  const res = await getWithTokenApi("/book/findAll", params);
   return res;
 });
 
 export const postRentBook = createAsyncThunk("postRentBook", async (params) => {
-  const res = await postRentApi("/rentDetail/add", params);
+  const res = await postWithTokenApi("/rentDetail/add", params);
   return res;
 });
 
 export const postBookApi = createAsyncThunk("postbookapi", async (params) => {
-  const res = await postApi("/book/get/me", params);
+  const res = await postWithTokenApi("/book/get/me", params);
   return res;
 });
 
