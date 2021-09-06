@@ -16,12 +16,26 @@ export const postBookApi = createAsyncThunk("postbookapi", async (params) => {
   return res;
 });
 
+export const getAllComment = createAsyncThunk(
+  "getAllComment",
+  async (params) => {
+    const res = await postWithTokenApi("/rating/getComment", params);
+    return res;
+  }
+);
+
+export const postComment = createAsyncThunk("postComment", async (params) => {
+  const res = await postWithTokenApi("/rating/comment", params);
+  return res;
+});
+
 const initialState = {
   booksList: [],
   message: "",
   selectedList: [],
   status: "idle",
   err: null,
+  commentList: [],
 };
 
 const booksSlice = createSlice({
@@ -75,6 +89,26 @@ const booksSlice = createSlice({
     },
     [postRentBook.rejected]: (state, action) => {
       state.err = action.payload.err;
+      state.status = "fail";
+    },
+    [getAllComment.fulfilled]: (state, action) => {
+      state.commentList = action.payload;
+      state.status = "success";
+    },
+    [getAllComment.rejected]: (state, action) => {
+      state.err = "can not fetch comment from server";
+      state.status = "fail";
+    },
+    [postComment.fulfilled]: (state, action) => {
+      state.status = "success";
+      if (action.payload.message) {
+        state.message = action.payload.message;
+      } else {
+        state.err = action.payload.err;
+      }
+    },
+    [postComment.rejected]: (state, action) => {
+      state.status = "can not comment :( ";
       state.status = "fail";
     },
   },

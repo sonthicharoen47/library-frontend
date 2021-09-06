@@ -17,7 +17,6 @@ const BookList = () => {
       dispatch(updateBookStatus("idle"));
     });
   }, [dispatch, token]);
-  console.log(status);
   if (isLogged === false) {
     return <Redirect to="/login" />;
   }

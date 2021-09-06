@@ -20,7 +20,7 @@ const Navbar = () => {
   const [logInView, setLogInView] = useState("hidden");
 
   useEffect(() => {
-    if (Object.entries(user).length > 0 && isLogged && token) {
+    if (user && isLogged && token) {
       setLogInView("visible");
     } else {
       setLogInView("hidden");

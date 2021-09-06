@@ -69,7 +69,7 @@ const LoginForm = () => {
             } else {
               history.push("/dashboard");
             }
-          }, 1000);
+          }, 500);
         } else {
           setAlert({
             open: true,

@@ -17,10 +17,13 @@ const BookCard = ({ book }) => {
   const history = useHistory();
   return (
     <div>
-      <Card sx={{ maxWidth: 250, maxheight: 300 }}>
+      <Card sx={{ maxWidth: 200, maxheight: 250 }}>
         <CardContent>
-          <Typography gutterBottom variant="h6" component="div">
+          <Typography gutterBottom variant="h5" component="div">
             {book.title}
+          </Typography>
+          <Typography gutterBottom variant="body" component="div">
+            {book.rating ? book.rating : 0}
           </Typography>
         </CardContent>
         <CardActions>
@@ -29,7 +32,9 @@ const BookCard = ({ book }) => {
           </Button>
           <Button
             size="small"
-            onClick={() => history.push("dashboard/me", { bookId: book.id_book })}
+            onClick={() =>
+              history.push("dashboard/me", { bookId: book.id_book })
+            }
           >
             More
           </Button>

@@ -12,7 +12,7 @@ const initialState = {
 export const signupAccount = createAsyncThunk(
   "signupaccount",
   async (params) => {
-    const res = await postWithoutTokenApi("/account/register", params);
+    const res = await postWithoutTokenApi("/register", params);
     return res;
   }
 );

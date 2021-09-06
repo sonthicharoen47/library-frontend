@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
-import { booksSelected } from "./bookSlice";
+import { booksSelected, getAllComment, updateBookStatus } from "./bookSlice";
 import pic1 from "../../picture/harry_the_prison.jpeg";
 // import { postBookApi } from "./bookSlice";
 //css
-import { Container, Box, CssBaseline, Grid, Button } from "@material-ui/core";
+import {
+  Container,
+  Box,
+  CssBaseline,
+  Grid,
+  Button,
+  Paper,
+  Typography,
+} from "@material-ui/core";
+import AddComment from "./AddComment";
+import CommentCard from "./CommentCard";
 
 const SingleBookPage = () => {
   const location = useLocation();
@@ -14,10 +24,21 @@ const SingleBookPage = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
-
   const book = useSelector((state) =>
     state.books.booksList.find((items) => items.id_book === bookId)
   );
+  const { token } = useSelector((state) => state.accounts);
+
+  useEffect(() => {
+    let body = {
+      fk_book: book.id_book,
+    };
+    dispatch(getAllComment({ body, token })).then(() => {
+      dispatch(updateBookStatus("idle"));
+    });
+  }, [dispatch, book.id_book, token]);
+
+  const { commentList } = useSelector((state) => state.books);
 
   if (!book) {
     return (
@@ -27,30 +48,115 @@ const SingleBookPage = () => {
     );
   }
 
-  //find author and category
-
   return (
-    <Container>
-      <CssBaseline />
-      <Box sx={{ width: "100%", height: 500 }}>
-        <Grid container spacing={2} justifyContent="center" item xs={12}>
-          <Grid item xs={6}>
-            <img src={pic1} width="90%" height="75%" alt="img1" />
-          </Grid>
-          <Grid item xs={6}>
-            <h1>{book.title}</h1>
-            <h3>{book.description}</h3>
-          </Grid>
+    <Box sx={{ bgcolor: "primary.main" }}>
+      <Grid container sx={{ mb: 3 }}>
+        <Grid item xs={6} align="center">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              justifyContent: "center",
+              bgcolor: "background.paper",
+              overflow: "hidden",
+              borderRadius: "12px",
+              boxShadow: 1,
+              fontWeight: "bold",
+              m: 2,
+            }}
+          >
+            <Box
+              component="img"
+              sx={{
+                height: 233,
+                width: 350,
+                maxHeight: { xs: 233, md: 167 },
+                maxWidth: { xs: 350, md: 250 },
+              }}
+              alt="The house from the offer."
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+            />
+          </Box>
         </Grid>
-        <Button type="button" onClick={() => dispatch(booksSelected(book))}>
-          Add
-        </Button>
-        <Button type="button" onClick={() => history.goBack()}>
-          Back
-        </Button>
+        <Grid item xs={6}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              bgcolor: "background.paper",
+              overflow: "hidden",
+              borderRadius: "12px",
+              boxShadow: 1,
+              fontWeight: "bold",
+              m: 2,
+            }}
+          >
+            <Box
+              sx={{
+                p: 1,
+                bgcolor: "grey.300",
+                justifyContent: "center",
+                display: "flex",
+              }}
+            >
+              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                {book.title}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                p: 1,
+                pl: 8,
+                bgcolor: "success.main",
+                justifyContent: "flex-start",
+                display: "flex",
+              }}
+            >
+              <Typography variant="body2">{book.description}</Typography>
+            </Box>
+            <Box
+              sx={{
+                p: 1,
+                bgcolor: "warning.main",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                display: "flex",
+              }}
+            >
+              <Button
+                sx={{ mx: 2, border: 1, borderRadius: 4 }}
+                onClick={() => dispatch(booksSelected(book))}
+              >
+                Add
+              </Button>
+              <Button
+                sx={{ mx: 2, border: 1, borderRadius: 4 }}
+                onClick={() => history.goBack()}
+              >
+                Back
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+      <AddComment bookId={book.id_book} />
+      <Box sx={{ mt: 2, alignItems: "center" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", pl: 6 }}>
+          CommentCardList
+        </Typography>
+        <Grid container>
+          {commentList.length > 0 ? (
+            commentList.map((items) => (
+              <Grid item key={items.id_rating} xs={6}>
+                <CommentCard comment={items} />
+              </Grid>
+            ))
+          ) : (
+            <h1>no comment</h1>
+          )}
+        </Grid>
       </Box>
-    </Container>
+    </Box>
   );
 };
-
 export default SingleBookPage;
