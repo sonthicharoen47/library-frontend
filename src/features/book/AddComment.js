@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { postComment } from "./bookSlice";
 import { useDispatch, useSelector } from "react-redux";
 //css

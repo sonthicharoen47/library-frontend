@@ -4,7 +4,7 @@ import { getWithTokenApi } from "../../api/publicApi";
 export const getOrderHistory = createAsyncThunk(
   "getOrderHistory",
   async (params) => {
-    const res = await getWithTokenApi("/rentDetail/findAll/me", params);
+    const res = await getWithTokenApi("/borrowDetail/findAll/me", params);
     return res;
   }
 );

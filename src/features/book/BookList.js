@@ -9,7 +9,7 @@ import { CssBaseline, Container, Grid } from "@material-ui/core";
 
 const BookList = () => {
   const dispatch = useDispatch();
-  const { booksList, status } = useSelector((state) => state.books);
+  const { booksList } = useSelector((state) => state.books);
   const { isLogged, token } = useSelector((state) => state.accounts);
 
   useEffect(() => {

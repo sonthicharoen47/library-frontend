@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deletedSelected, postRentBook, clearSelected } from "./bookSlice";
+import { deletedSelected, postBorrowBook, clearSelected } from "./bookSlice";
 import { useHistory } from "react-router-dom";
 //css
 import {
@@ -9,23 +9,23 @@ import {
   Typography,
   Card,
   CardActions,
-  TextField,
   Container,
   Snackbar,
+  Box,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/core/Alert";
 import Slide from "@material-ui/core/Slide";
 
-import { LocalizationProvider, DatePicker } from "@material-ui/lab";
-import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
-import addWeeks from "date-fns/addWeeks";
+import moment from "moment";
+
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-const getWeeksAfter = (date, amount) => {
-  return date ? addWeeks(date, amount) : undefined;
-};
 
 const BookSelected = () => {
   const dispatch = useDispatch();
@@ -39,6 +39,8 @@ const BookSelected = () => {
     text: "",
     severity: "",
   });
+  const dateNow = new Date();
+  const dateMax = new Date(moment().add(7, "days"));
 
   useEffect(() => {
     if (status === "success") {
@@ -62,13 +64,13 @@ const BookSelected = () => {
 
   const [endDate, setEndDate] = useState("");
   //create a datepicker to choose end date for rent books.
-  const handleRent = () => {
+  const handleBorrow = () => {
     const body = {
       endDate: endDate,
-      bookRent: selectedList,
+      borrowBook: selectedList,
     };
     try {
-      dispatch(postRentBook({ body, token }));
+      dispatch(postBorrowBook({ body, token }));
     } catch (err) {
       console.log(err);
     }
@@ -112,24 +114,23 @@ const BookSelected = () => {
         </Snackbar>
         <h1>Book Selected!!!!</h1>
         {selectedList.length > 0 ? renderedSelected : <h1>empty book</h1>}
-        <br />
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            disablePast
-            label="end date of rent"
-            openTo="year"
-            views={["year", "month", "day"]}
-            value={endDate}
-            maxDate={getWeeksAfter(new Date(), 2)}
-            onChange={(newValue) => {
-              setEndDate(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-        <Button size="medium" onClick={handleRent}>
-          Rent
-        </Button>
+        <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Return book date"
+              value={endDate}
+              minDate={dateNow}
+              maxDate={dateMax}
+              onChange={(newValue) => {
+                setEndDate(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <Button size="medium" onClick={handleBorrow} sx={{ ml: 1 }}>
+            Borrow
+          </Button>
+        </Box>
       </Container>
     </React.Fragment>
   );

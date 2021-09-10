@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signupAccount, updateStatus } from "./accountSlice";
+import { signupAccount } from "./accountSlice";
 import { useHistory } from "react-router-dom";
 import { updateAccountStatus } from "./accountSlice";
 //css
@@ -102,7 +102,7 @@ const AccountAddForm = () => {
         severity: "error",
       });
     }
-  }, [dispatch, status, err, history, message]);
+  }, [status, err, history, message]);
 
   const handleClose = (e, reason) => {
     if (reason === "clickaway") {

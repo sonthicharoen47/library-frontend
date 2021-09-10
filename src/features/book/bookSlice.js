@@ -6,10 +6,13 @@ export const getAllBook = createAsyncThunk("getAllBook", async (params) => {
   return res;
 });
 
-export const postRentBook = createAsyncThunk("postRentBook", async (params) => {
-  const res = await postWithTokenApi("/rentDetail/add", params);
-  return res;
-});
+export const postBorrowBook = createAsyncThunk(
+  "postBorrowBook",
+  async (params) => {
+    const res = await postWithTokenApi("/borrowDetail/add", params);
+    return res;
+  }
+);
 
 export const postBookApi = createAsyncThunk("postbookapi", async (params) => {
   const res = await postWithTokenApi("/book/get/me", params);
@@ -75,10 +78,10 @@ const booksSlice = createSlice({
       state.message = "can not fetch data!";
       state.status = "fail";
     },
-    [postRentBook.pending]: (state, action) => {
+    [postBorrowBook.pending]: (state, action) => {
       state.status = "loading";
     },
-    [postRentBook.fulfilled]: (state, action) => {
+    [postBorrowBook.fulfilled]: (state, action) => {
       if (!action.payload.err) {
         state.message = action.payload.message;
         state.status = "success";
@@ -87,7 +90,7 @@ const booksSlice = createSlice({
         state.status = "fail";
       }
     },
-    [postRentBook.rejected]: (state, action) => {
+    [postBorrowBook.rejected]: (state, action) => {
       state.err = action.payload.err;
       state.status = "fail";
     },

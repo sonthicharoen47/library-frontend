@@ -52,8 +52,15 @@ const Navbar = () => {
               </Button>
             </Typography>
             <nav>
-              <Link to="/dashboard/selected">BookSelected</Link>
-              <Link to="/orderhistory">history</Link>
+              <Link to="/dashboard/selected" style={{ textDecoration: "none" }}>
+                <Button type="button">BookSelected</Button>
+              </Link>
+              <Link
+                to="/orderhistory"
+                style={{ textDecoration: "none", height: "100%" }}
+              >
+                <Button type="button">history</Button>
+              </Link>
             </nav>
 
             <Button

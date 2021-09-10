@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 //css
-import { Container, Box, Typography, Rating, Grid } from "@material-ui/core";
+import { Box, Typography, Rating, Grid } from "@material-ui/core";
 const CommentCard = ({ comment }) => {
   return (
     <Box

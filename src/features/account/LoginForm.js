@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { signinAccount } from "./accountSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { signinAccount, updateAccountStatus } from "./accountSlice";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 //css
 import {
   Button,
@@ -26,7 +26,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const LoginForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { isLogged, token, status } = useSelector((state) => state.accounts);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,12 +63,13 @@ const LoginForm = () => {
             severity: "success",
           });
           setTimeout(() => {
+            updateAccountStatus("idle");
             if (result.payload.user.role === "admin") {
               history.push("/admin/dashboard");
             } else {
               history.push("/dashboard");
             }
-          }, 500);
+          }, 1000);
         } else {
           setAlert({
             open: true,

@@ -26,7 +26,7 @@ const OrderHistorySelected = () => {
             <Typography>{items.start_date.slice(11, 16)}</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {items.RentDetails.map((element) => (
+            {items.BorrowDetails.map((element) => (
               <Typography key={element.Book.id_book}>
                 {element.Book.title}
               </Typography>
