@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBorrow } from "./adminsSlice";
+import {
+  getAllBorrow,
+  updateBorrowStatus,
+  updateAdminStatus,
+} from "./adminsSlice";
 import { alpha } from "@mui/material/styles";
 
 import {
@@ -20,10 +24,32 @@ import {
   Typography,
   Tooltip,
   IconButton,
+  Modal,
+  Button,
+  Snackbar,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 
 const columns = [
   {
@@ -123,7 +149,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, selected, token } = props;
 
   return (
     <Toolbar
@@ -152,13 +178,10 @@ const EnhancedTableToolbar = (props) => {
         <Typography>BorrowTable</Typography>
       )}
 
-      {numSelected > 1 ? (
+      {numSelected > 0 ? (
         <Box sx={{ display: "flex" }}>
-          <Tooltip title="Done">
-            <IconButton>
-              <DoneIcon />
-            </IconButton>
-          </Tooltip>
+          <DoneButtonModal borrowId={selected} token={token} />
+
           <Tooltip title="Delete">
             <IconButton>
               <DeleteIcon />
@@ -173,21 +196,106 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
+const DoneButtonModal = (props) => {
+  const { borrowId, token } = props;
+  const [modalOpen, setModalOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  let body = {
+    borrowListId: borrowId,
+    status: "borrowing",
+  };
+
+  const handleModalClick = () => {
+    dispatch(updateBorrowStatus({ body, token }));
+    dispatch(getAllBorrow({ token }));
+    handleModalClose();
+  };
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <IconButton onClick={handleModalOpen}>
+        <DoneIcon />
+      </IconButton>
+      <Modal
+        open={modalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="update-modal-title"
+        aria-describedby="update-modal-description"
+      >
+        <Box sx={{ ...modalStyle, width: 400 }}>
+          <h2 id="update-modal-title">Text in a child modal</h2>
+          <p id="update-modal-description">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+          </p>
+          <Button onClick={handleModalClick}>Confirm</Button>
+          <Button onClick={handleModalClose}>Close</Button>
+        </Box>
+      </Modal>
+      {/* <Snackbar
+        open={snackItems.open}
+        autoHideDuration={3000}
+        onClose={handleSnackClose}
+      >
+        <Alert
+          onClose={handleSnackClose}
+          serverity={snackItems.serverity}
+          sx={{ width: "100%" }}
+        >
+          {snackItems.text}!
+        </Alert>
+      </Snackbar> */}
+    </React.Fragment>
+  );
+};
+
 const AdminBorrowTable = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.accounts);
+  const { status, message, err, borrowList } = useSelector(
+    (state) => state.admins
+  );
   const [tableData, setTableData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [selected, setSelected] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("start_date");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(getAllBorrow({ token })).then((result) => {
-      setTableData(result.payload);
-    });
-  }, [dispatch, token]);
+    dispatch(getAllBorrow({ token }));
+  }, []);
+
+  useEffect(() => {
+    if (borrowList !== []) {
+      setTableData(borrowList);
+    }
+  }, [borrowList]);
+
+  useEffect(() => {
+    if (status === "success" && message !== "") {
+      setOpen(true);
+      setSelected([]);
+    } else {
+      dispatch(updateAdminStatus("idle"));
+    }
+  }, [status, message, err]);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   const handleChangePage = (e, newValue) => {
     setPage(newValue);
@@ -235,10 +343,31 @@ const AdminBorrowTable = () => {
     setOrderBy(property);
   };
 
+  const handleUpdatetatus = (id, statusUpdate) => {
+    let body = {
+      borrowListId: id,
+      status: statusUpdate,
+    };
+    dispatch(updateBorrowStatus({ body, token }));
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            serverity={open === true ? "success" : "error"}
+            sx={{ width: "100%" }}
+          >
+            {open === true ? message : err}
+          </Alert>
+        </Snackbar>
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          selected={selected}
+          token={token}
+        />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -293,9 +422,21 @@ const AdminBorrowTable = () => {
                         {row.end_date.slice(0, 10)}
                       </TableCell>
                       <TableCell align="right">
-                        <IconButton>
-                          <DeleteIcon />
-                        </IconButton>
+                        {/* <Box>
+                          <IconButton onClick={handleUpOpen}>
+                            <DoneIcon />
+                          </IconButton>
+                          <Modal open={upOpen} onClose={handleUpOpenClose}>
+                            <Box sx={{ ...modalStyle, width: 400 }}>
+                              <Typography>Are u sure?</Typography>
+                              <Button>Confirm</Button>
+                            </Box>
+                          </Modal>
+                        </Box> */}
+                        <DoneButtonModal
+                          borrowId={row.id_borrow}
+                          token={token}
+                        />
                       </TableCell>
                     </TableRow>
                   );

@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getWithTokenApi, postWithTokenApi } from "../../api/publicApi";
+import {
+  getWithTokenApi,
+  postWithTokenApi,
+  putWithTokenApi,
+} from "../../api/publicApi";
 
 export const getAllAuthor = createAsyncThunk("getAllAutor", async (params) => {
   const res = getWithTokenApi("/author/findAll", params);
@@ -36,9 +40,17 @@ export const postAddCategory = createAsyncThunk(
 );
 
 export const getAllBorrow = createAsyncThunk("getAllBorrow", async (params) => {
-  const res = getWithTokenApi("/borrow/findAll", params);
+  const res = getWithTokenApi("/borrow/find/ordering", params);
   return res;
 });
+
+export const updateBorrowStatus = createAsyncThunk(
+  "updateBorrowStatus",
+  async (params) => {
+    const res = putWithTokenApi("/borrow/update", params);
+    return res;
+  }
+);
 
 const initialState = {
   authorList: [],
@@ -98,6 +110,9 @@ const adminsSlice = createSlice({
       state.status = "fail";
       state.err = "something wrong!";
     },
+    [getAllBorrow.pending]: (state, action) => {
+      state.status = "loading";
+    },
     [getAllBorrow.fulfilled]: (state, action) => {
       state.borrowList = action.payload;
       state.status = "success";
@@ -105,6 +120,18 @@ const adminsSlice = createSlice({
     [getAllBorrow.rejected]: (state, action) => {
       state.status = "fail";
       state.err = "backend wrong";
+    },
+    [updateBorrowStatus.fulfilled]: (state, action) => {
+      state.status = "success";
+      if (action.payload.message) {
+        state.message = action.payload.message;
+      } else {
+        state.err = action.payload.err;
+      }
+    },
+    [updateBorrowStatus.rejected]: (state, action) => {
+      state.status = "fail";
+      state.err = "error";
     },
   },
 });

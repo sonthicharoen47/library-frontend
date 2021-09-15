@@ -41,3 +41,15 @@ export const postWithoutTokenApi = async (api, params) => {
   });
   return await result.json();
 };
+
+export const putWithTokenApi = async (api, params) => {
+  const result = await fetch(api, {
+    method: "put",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${params.token}`,
+    },
+    body: JSON.stringify(params.body),
+  });
+  return await result.json();
+};
