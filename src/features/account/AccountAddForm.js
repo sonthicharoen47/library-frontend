@@ -10,14 +10,16 @@ import {
   Grid,
   Link,
   Box,
-  TextField,
   Avatar,
   Typography,
   Container,
   Snackbar,
 } from "@material-ui/core";
-import { LocalizationProvider, DatePicker } from "@material-ui/lab";
-import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
+
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import MuiAlert from "@material-ui/core/Alert";
@@ -28,6 +30,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const regex = /^[0-9\b]+$/;
+const dateMax = new Date();
 
 const AccountAddForm = () => {
   const dispatch = useDispatch();
@@ -210,11 +213,11 @@ const AccountAddForm = () => {
                   <DatePicker
                     disableFuture
                     label="Date of birth"
-                    openTo="year"
-                    views={["year", "month", "day"]}
-                    maxDate={new Date()}
+                    maxDate={dateMax}
                     value={dob}
-                    onChange={onDobChanged}
+                    onChange={(newValue) => {
+                      setDob(newValue);
+                    }}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
