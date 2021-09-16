@@ -5,6 +5,7 @@ import {
   getAllBorrow,
   updateBorrowStatus,
   updateAdminStatus,
+  deletedBorrow,
 } from "./adminsSlice";
 import { alpha } from "@mui/material/styles";
 
@@ -22,7 +23,6 @@ import {
   TableSortLabel,
   Toolbar,
   Typography,
-  Tooltip,
   IconButton,
   Modal,
   Button,
@@ -180,13 +180,7 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 ? (
         <Box sx={{ display: "flex" }}>
-          <DoneButtonModal borrowId={selected} token={token} />
-
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          <ButtonModal borrowId={selected} token={token} />
         </Box>
       ) : null}
     </Toolbar>
@@ -196,63 +190,85 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-const DoneButtonModal = (props) => {
+const ButtonModal = (props) => {
   const { borrowId, token } = props;
-  const [modalOpen, setModalOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const dispatch = useDispatch();
 
-  let body = {
-    borrowListId: borrowId,
-    status: "borrowing",
+  const handleDeleteClick = () => {
+    let body = {
+      borrowListId: borrowId,
+    };
+    dispatch(deletedBorrow({ body, token })).then(() => {
+      dispatch(getAllBorrow({ token }));
+    });
+    handleDeleteClose();
   };
 
-  const handleModalClick = () => {
-    dispatch(updateBorrowStatus({ body, token }));
-    dispatch(getAllBorrow({ token }));
-    handleModalClose();
+  const handleDeleteOpen = () => {
+    setDeleteOpen(true);
   };
 
-  const handleModalOpen = () => {
-    setModalOpen(true);
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
   };
 
-  const handleModalClose = () => {
-    setModalOpen(false);
+  const handleUpdateClick = () => {
+    let body = {
+      borrowListId: borrowId,
+      status: "borrowing",
+    };
+    dispatch(updateBorrowStatus({ body, token })).then(() => {
+      dispatch(getAllBorrow({ token }));
+    });
+    handleUpdateClose();
+  };
+
+  const handleUpdateOpen = () => {
+    setUpdateOpen(true);
+  };
+
+  const handleUpdateClose = () => {
+    setUpdateOpen(false);
   };
 
   return (
     <React.Fragment>
-      <IconButton onClick={handleModalOpen}>
+      <IconButton onClick={handleUpdateOpen}>
         <DoneIcon />
       </IconButton>
+      <IconButton onClick={handleDeleteOpen}>
+        <DeleteIcon />
+      </IconButton>
       <Modal
-        open={modalOpen}
-        onClose={handleModalClose}
+        open={updateOpen}
+        onClose={handleUpdateClose}
         aria-labelledby="update-modal-title"
         aria-describedby="update-modal-description"
       >
         <Box sx={{ ...modalStyle, width: 400 }}>
-          <h2 id="update-modal-title">Text in a child modal</h2>
+          <h2 id="update-modal-title">Alert!</h2>
           <p id="update-modal-description">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+            You want to changed borrow status?
           </p>
-          <Button onClick={handleModalClick}>Confirm</Button>
-          <Button onClick={handleModalClose}>Close</Button>
+          <Button onClick={handleUpdateClick}>Confirm</Button>
+          <Button onClick={handleUpdateClose}>Close</Button>
         </Box>
       </Modal>
-      {/* <Snackbar
-        open={snackItems.open}
-        autoHideDuration={3000}
-        onClose={handleSnackClose}
+      <Modal
+        open={deleteOpen}
+        onClose={handleDeleteClose}
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
       >
-        <Alert
-          onClose={handleSnackClose}
-          serverity={snackItems.serverity}
-          sx={{ width: "100%" }}
-        >
-          {snackItems.text}!
-        </Alert>
-      </Snackbar> */}
+        <Box sx={{ ...modalStyle, width: 400 }}>
+          <h2 id="delete-modal-title">Alert!</h2>
+          <p id="delete-modal-description">You want to deleted this borrow?</p>
+          <Button onClick={handleDeleteClick}>Confirm</Button>
+          <Button onClick={handleDeleteClose}>Close</Button>
+        </Box>
+      </Modal>
     </React.Fragment>
   );
 };
@@ -285,7 +301,8 @@ const AdminBorrowTable = () => {
     if (status === "success" && message !== "") {
       setOpen(true);
       setSelected([]);
-    } else {
+    }
+    if (status === "success") {
       dispatch(updateAdminStatus("idle"));
     }
   }, [status, message, err]);
@@ -341,14 +358,6 @@ const AdminBorrowTable = () => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  };
-
-  const handleUpdatetatus = (id, statusUpdate) => {
-    let body = {
-      borrowListId: id,
-      status: statusUpdate,
-    };
-    dispatch(updateBorrowStatus({ body, token }));
   };
 
   return (
@@ -422,21 +431,7 @@ const AdminBorrowTable = () => {
                         {row.end_date.slice(0, 10)}
                       </TableCell>
                       <TableCell align="right">
-                        {/* <Box>
-                          <IconButton onClick={handleUpOpen}>
-                            <DoneIcon />
-                          </IconButton>
-                          <Modal open={upOpen} onClose={handleUpOpenClose}>
-                            <Box sx={{ ...modalStyle, width: 400 }}>
-                              <Typography>Are u sure?</Typography>
-                              <Button>Confirm</Button>
-                            </Box>
-                          </Modal>
-                        </Box> */}
-                        <DoneButtonModal
-                          borrowId={row.id_borrow}
-                          token={token}
-                        />
+                        <ButtonModal borrowId={row.id_borrow} token={token} />
                       </TableCell>
                     </TableRow>
                   );

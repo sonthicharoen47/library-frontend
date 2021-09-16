@@ -84,9 +84,6 @@ const AccountAddForm = () => {
       setPhone(e.target.value);
     }
   };
-  const onDobChanged = (date) => {
-    setDob(date);
-  };
 
   useEffect(() => {
     if (status === "success") {

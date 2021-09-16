@@ -3,6 +3,7 @@ import {
   getWithTokenApi,
   postWithTokenApi,
   putWithTokenApi,
+  deletedWithTokenApi,
 } from "../../api/publicApi";
 
 export const getAllAuthor = createAsyncThunk("getAllAutor", async (params) => {
@@ -48,6 +49,14 @@ export const updateBorrowStatus = createAsyncThunk(
   "updateBorrowStatus",
   async (params) => {
     const res = putWithTokenApi("/borrow/update", params);
+    return res;
+  }
+);
+
+export const deletedBorrow = createAsyncThunk(
+  "deletedBorrow",
+  async (params) => {
+    const res = deletedWithTokenApi("/borrow/delete", params);
     return res;
   }
 );
@@ -121,6 +130,10 @@ const adminsSlice = createSlice({
       state.status = "fail";
       state.err = "backend wrong";
     },
+    [updateBorrowStatus.pending]: (state, action) => {
+      state.message = "";
+      state.err = null;
+    },
     [updateBorrowStatus.fulfilled]: (state, action) => {
       state.status = "success";
       if (action.payload.message) {
@@ -132,6 +145,22 @@ const adminsSlice = createSlice({
     [updateBorrowStatus.rejected]: (state, action) => {
       state.status = "fail";
       state.err = "error";
+    },
+    [deletedBorrow.pending]: (state, action) => {
+      state.message = "";
+      state.err = null;
+    },
+    [deletedBorrow.fulfilled]: (state, action) => {
+      state.status = "success";
+      if (action.payload.message) {
+        state.message = action.payload.message;
+      } else {
+        state.err = action.payload.err;
+      }
+    },
+    [deletedBorrow.rejected]: (state, action) => {
+      state.err = "backend wrong!";
+      state.status = "fail";
     },
   },
 });
