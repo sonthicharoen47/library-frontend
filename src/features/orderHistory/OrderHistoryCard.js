@@ -6,14 +6,13 @@ import {
   CardContent,
   Typography,
   CardActionArea,
-  CardActions,
 } from "@material-ui/core";
 const ListCard = ({ order }) => {
   const history = useHistory();
 
   return (
-    <div>
-      <Card sx={{ maxWidth: 250, maxheight: 300 }}>
+    <React.Fragment>
+      <Card sx={{ maxWidth: "100%", maxheight: 250, m: 1 }}>
         <CardActionArea
           onClick={() =>
             history.push("/orderhistory/date", { orderHistory: order.rentArr })
@@ -24,10 +23,9 @@ const ListCard = ({ order }) => {
               {order.date}
             </Typography>
           </CardContent>
-          <CardActions></CardActions>
         </CardActionArea>
       </Card>
-    </div>
+    </React.Fragment>
   );
 };
 
