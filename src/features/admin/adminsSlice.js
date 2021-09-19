@@ -40,10 +40,13 @@ export const postAddCategory = createAsyncThunk(
   }
 );
 
-export const getAllBorrow = createAsyncThunk("getAllBorrow", async (params) => {
-  const res = getWithTokenApi("/borrow/find/ordering", params);
-  return res;
-});
+export const getAllOrderingBorrow = createAsyncThunk(
+  "getAllOrderingBorrow",
+  async (params) => {
+    const res = getWithTokenApi("/borrow/find/ordering", params);
+    return res;
+  }
+);
 
 export const updateBorrowStatus = createAsyncThunk(
   "updateBorrowStatus",
@@ -60,6 +63,11 @@ export const deletedBorrow = createAsyncThunk(
     return res;
   }
 );
+
+export const getAllBorrow = createAsyncThunk("getAllBorrow", async (params) => {
+  const res = getWithTokenApi("/borrow/findAll", params);
+  return res;
+});
 
 const initialState = {
   authorList: [],
@@ -119,14 +127,14 @@ const adminsSlice = createSlice({
       state.status = "fail";
       state.err = "something wrong!";
     },
-    [getAllBorrow.pending]: (state, action) => {
+    [getAllOrderingBorrow.pending]: (state, action) => {
       state.status = "loading";
     },
-    [getAllBorrow.fulfilled]: (state, action) => {
+    [getAllOrderingBorrow.fulfilled]: (state, action) => {
       state.borrowList = action.payload;
       state.status = "success";
     },
-    [getAllBorrow.rejected]: (state, action) => {
+    [getAllOrderingBorrow.rejected]: (state, action) => {
       state.status = "fail";
       state.err = "backend wrong";
     },
@@ -160,6 +168,18 @@ const adminsSlice = createSlice({
     },
     [deletedBorrow.rejected]: (state, action) => {
       state.err = "backend wrong!";
+      state.status = "fail";
+    },
+    [getAllBorrow.pending]: (state, action) => {
+      state.message = "";
+      state.err = "";
+    },
+    [getAllBorrow.fulfilled]: (state, action) => {
+      state.borrowList = action.payload;
+      state.status = "success";
+    },
+    [getAllBorrow.rejected]: (state, action) => {
+      state.err = "backend fail";
       state.status = "fail";
     },
   },

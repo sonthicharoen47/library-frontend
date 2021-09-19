@@ -1,6 +1,7 @@
 import React from "react";
-// import AddminAddBook from "./AdminAddBook";
+import AddminAddBook from "./AdminAddBook";
 import AdminBorrowTable from "./AdminBorrowTable";
+import AdminTest from "./AdminTest";
 
 const AdminDashboard = () => {
   return (
@@ -8,6 +9,7 @@ const AdminDashboard = () => {
       <h1>Admin Dashboard</h1>
       {/* <AddminAddBook /> */}
       <AdminBorrowTable />
+      {/* <AdminTest /> */}
     </div>
   );
 };

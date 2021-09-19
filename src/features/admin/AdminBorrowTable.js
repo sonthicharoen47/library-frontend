@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getAllBorrow,
   updateBorrowStatus,
   updateAdminStatus,
   deletedBorrow,
+  getAllBorrow,
 } from "./adminsSlice";
 import { alpha } from "@mui/material/styles";
 
@@ -27,9 +27,15 @@ import {
   Modal,
   Button,
   Snackbar,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  Grid,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import MuiAlert from "@mui/material/Alert";
 
@@ -149,7 +155,13 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, selected, token } = props;
+  const { numSelected, selected, token, onRequestFilter } = props;
+  const [statusFilter, setStatusFilter] = useState("ordering");
+
+  const handleChanged = (e) => {
+    setStatusFilter(e.target.value);
+    onRequestFilter(e, e.target.value);
+  };
 
   return (
     <Toolbar
@@ -165,24 +177,55 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography>BorrowTable</Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Box sx={{ display: "flex" }}>
-          <ButtonModal borrowId={selected} token={token} />
-        </Box>
-      ) : null}
+      <Grid container spacing={2} sx={{ alignItems: "center" }}>
+        <Grid item xs={8}>
+          <Box sx={{ justifyContent: "flex-start" }}>
+            {numSelected > 0 ? (
+              <Typography
+                sx={{ flex: "1 1 100%" }}
+                variant="h6"
+                id="tableTitle"
+                component="div"
+              >
+                {numSelected} selected
+              </Typography>
+            ) : (
+              <Typography>BorrowTable</Typography>
+            )}
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <Box>
+            {numSelected > 0 ? (
+              <Box sx={{ display: "flex", justifyContent: "flex-end", mr: 4 }}>
+                <ButtonModal borrowId={selected} token={token} />
+              </Box>
+            ) : (
+              <Box sx={{ display: "flex", justifyContent: "flex-end", mr: 4 }}>
+                <Box sx={{ minWidth: 150 }}>
+                  <FormControl>
+                    <InputLabel id="status-select-label">Status</InputLabel>
+                    <Select
+                      labelId="status-select-label"
+                      id="status-select"
+                      value={statusFilter}
+                      label="Status"
+                      onChange={handleChanged}
+                    >
+                      <MenuItem value="ordering">Ordering</MenuItem>
+                      <MenuItem value="borrowing">Borrowing</MenuItem>
+                      <MenuItem value="return">Return</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+                <IconButton>
+                  <FilterListIcon />
+                </IconButton>
+              </Box>
+            )}
+          </Box>
+        </Grid>
+      </Grid>
     </Toolbar>
   );
 };
@@ -286,6 +329,7 @@ const AdminBorrowTable = () => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("start_date");
   const [open, setOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("ordering");
 
   useEffect(() => {
     dispatch(getAllBorrow({ token }));
@@ -354,10 +398,16 @@ const AdminBorrowTable = () => {
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const handleRequestSort = (e, property) => {
-    console.log(property);
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+  };
+
+  const handleRequestFilter = (e, property) => {
+    if (!property) {
+      setStatusFilter("ordering");
+    }
+    setStatusFilter(property);
   };
 
   return (
@@ -376,6 +426,7 @@ const AdminBorrowTable = () => {
           numSelected={selected.length}
           selected={selected}
           token={token}
+          onRequestFilter={handleRequestFilter}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -389,6 +440,7 @@ const AdminBorrowTable = () => {
             />
             <TableBody>
               {tableData
+                .filter((items) => items.status === statusFilter)
                 .slice()
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
