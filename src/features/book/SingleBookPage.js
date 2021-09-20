@@ -28,7 +28,8 @@ const SingleBookPage = () => {
     dispatch(getAllComment({ body, token })).then(() => {
       dispatch(updateBookStatus("idle"));
     });
-  }, [dispatch, book.id_book, token]);
+    console.log();
+  }, []);
 
   const { commentList } = useSelector((state) => state.books);
 

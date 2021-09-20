@@ -80,6 +80,8 @@ const booksSlice = createSlice({
     },
     [postBorrowBook.pending]: (state, action) => {
       state.status = "loading";
+      state.message = "";
+      state.err = null;
     },
     [postBorrowBook.fulfilled]: (state, action) => {
       if (!action.payload.err) {
@@ -101,6 +103,10 @@ const booksSlice = createSlice({
     [getAllComment.rejected]: (state, action) => {
       state.err = "can not fetch comment from server";
       state.status = "fail";
+    },
+    [postComment.pending]: (state, action) => {
+      state.message = "";
+      state.err = null;
     },
     [postComment.fulfilled]: (state, action) => {
       state.status = "success";

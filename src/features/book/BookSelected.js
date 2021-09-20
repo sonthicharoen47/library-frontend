@@ -42,25 +42,25 @@ const BookSelected = () => {
   const dateNow = new Date();
   const dateMax = new Date(moment().add(7, "days"));
 
-  useEffect(() => {
-    if (status === "success") {
-      setAlert({
-        open: true,
-        text: message,
-        severity: "success",
-      });
-      setTimeout(() => {
-        dispatch(clearSelected());
-        history.push("/dashboard");
-      }, 1000);
-    } else if (status === "fail") {
-      setAlert({
-        open: true,
-        text: err,
-        severity: "error",
-      });
-    }
-  }, [dispatch, status, err, history, message]);
+  // useEffect(() => {
+  //   if (status === "success") {
+  //     setAlert({
+  //       open: true,
+  //       text: message,
+  //       severity: "success",
+  //     });
+  //     setTimeout(() => {
+  //       dispatch(clearSelected());
+  //       history.push("/dashboard");
+  //     }, 1000);
+  //   } else if (status === "fail") {
+  //     setAlert({
+  //       open: true,
+  //       text: err,
+  //       severity: "error",
+  //     });
+  //   }
+  // }, [dispatch, status, err, history, message]);
 
   const [endDate, setEndDate] = useState("");
   //create a datepicker to choose end date for rent books.
@@ -70,7 +70,26 @@ const BookSelected = () => {
       borrowBook: selectedList,
     };
     try {
-      dispatch(postBorrowBook({ body, token }));
+      dispatch(postBorrowBook({ body, token })).then((result) => {
+        if (result.payload.message) {
+          setAlert({
+            open: true,
+            text: result.payload.message,
+            severity: "success",
+          });
+          setTimeout(() => {
+            dispatch(clearSelected());
+            history.push("/dashboard");
+          }, 1000);
+        }
+        if (result.payload.err) {
+          setAlert({
+            open: true,
+            text: result.payload.err,
+            severity: "error",
+          });
+        }
+      });
     } catch (err) {
       console.log(err);
     }
