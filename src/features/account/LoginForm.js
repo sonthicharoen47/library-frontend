@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signinAccount, updateAccountStatus } from "./accountSlice";
+import { signinAccount } from "./accountSlice";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 //css
@@ -13,15 +13,9 @@ import {
   TextField,
   Link,
   Container,
-  Snackbar,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import MuiAlert from "@material-ui/core/Alert";
-import Slide from "@material-ui/core/Slide";
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -37,11 +31,6 @@ const LoginForm = () => {
     helpText: "",
     error: false,
   });
-  const [alert, setAlert] = useState({
-    open: false,
-    text: "",
-    severity: "",
-  });
 
   const onEmailChanged = (e) => {
     setEmail(e.target.value);
@@ -56,26 +45,20 @@ const LoginForm = () => {
     if (email && password) {
       const body = { email, password };
       dispatch(signinAccount({ body })).then((result) => {
+        let text = "";
+        let severity = "info";
         if (result.payload.token) {
-          setAlert({
-            open: true,
-            text: "login success",
-            severity: "success",
-          });
-          setTimeout(() => {
-            updateAccountStatus("idle");
-            if (result.payload.user.role === "admin") {
-              history.push("/admin/dashboard");
-            } else {
-              history.push("/dashboard");
-            }
-          }, 1000);
+          text = "login successful!";
+          severity = "success";
+          dispatch(postSnackbarAlert({ text, severity }));
+          if (result.payload.user.role === "user") {
+            history.push("/dashboard");
+          } else if (result.payload.user.role === "admin") {
+            history.push("/admin/dashboard");
+          }
         } else {
-          setAlert({
-            open: true,
-            text: "email or password was wrong!",
-            severity: "error",
-          });
+          text = "email or password wrong!";
+          severity = "error";
           setEmailValidate({
             helpText: "email is Require!",
             error: true,
@@ -84,6 +67,7 @@ const LoginForm = () => {
             helpText: "password is Require!",
             error: true,
           });
+          dispatch(postSnackbarAlert({ text, severity }));
         }
       });
       setEmail("");
@@ -110,31 +94,9 @@ const LoginForm = () => {
     }
   };
 
-  const handleClose = (e, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setAlert({ open: false });
-  };
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        TransitionComponent={Slide}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={alert.severity}
-          sx={{ width: "100%" }}
-        >
-          {alert.text}
-        </Alert>
-      </Snackbar>
       <Box
         sx={{
           marginTop: 6,
@@ -191,17 +153,15 @@ const LoginForm = () => {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              {/* <Link href="#" variant="body2">
-                Forgot password?
-              </Link> */}
-            </Grid>
-            <Grid item>
-              <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+          >
+            <Link href="/register" variant="body2">
+              {"Don't have an account? Sign Up"}
+            </Link>
           </Grid>
         </Box>
       </Box>

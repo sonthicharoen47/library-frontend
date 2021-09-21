@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { signupAccount } from "./accountSlice";
 import { useHistory } from "react-router-dom";
 import { updateAccountStatus } from "./accountSlice";
@@ -13,21 +13,16 @@ import {
   Avatar,
   Typography,
   Container,
-  Snackbar,
-} from "@material-ui/core";
+  TextField,
+} from "@mui/material";
 
-import TextField from "@mui/material/TextField";
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
+
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import MuiAlert from "@material-ui/core/Alert";
-import Slide from "@material-ui/core/Slide";
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const regex = /^[0-9\b]+$/;
 const dateMax = new Date();
@@ -35,7 +30,6 @@ const dateMax = new Date();
 const AccountAddForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { message, status, err } = useSelector((state) => state.accounts);
 
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -43,19 +37,26 @@ const AccountAddForm = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState(new Date());
-  const [alert, setAlert] = useState({
-    open: false,
-    text: "",
-    severity: "",
-  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (fname && lname && email && password && phone) {
       const body = { fname, lname, email, password, phone, dob };
-      dispatch(signupAccount({ body })).then(() => {
+      dispatch(signupAccount({ body })).then((result) => {
+        let text = "";
+        let severity = "info";
+        if (result.payload.message) {
+          text = result.payload.message;
+          severity = "success";
+        }
+        if (result.payload.err) {
+          text = result.payload.err;
+          severity = "error";
+        }
+        dispatch(postSnackbarAlert({ text, severity }));
         dispatch(updateAccountStatus("idle"));
+        history.push("/login");
       });
     }
 
@@ -85,50 +86,9 @@ const AccountAddForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (status === "success") {
-      setAlert({
-        open: true,
-        text: message,
-        severity: "success",
-      });
-      setTimeout(() => {
-        history.push("/login");
-      }, 2000);
-    } else if (status === "fail") {
-      setAlert({
-        open: true,
-        text: err,
-        severity: "error",
-      });
-    }
-  }, [status, err, history, message]);
-
-  const handleClose = (e, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setAlert({ open: false });
-  };
-
   return (
     <React.Fragment>
       <Container component="main" maxWidth="xs">
-        <Snackbar
-          open={alert.open}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          TransitionComponent={Slide}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        >
-          <Alert
-            onClose={handleClose}
-            severity={alert.severity}
-            sx={{ width: "100%" }}
-          >
-            {alert.text}
-          </Alert>
-        </Snackbar>
         <CssBaseline />
         <Box
           sx={{

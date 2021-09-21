@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
 import { booksSelected, getAllComment, updateBookStatus } from "./bookSlice";
-// import pic1 from "../../picture/harry_the_prison.jpeg";
-// import { postBookApi } from "./bookSlice";
-//css
-import { Box, Grid, Button, Typography } from "@material-ui/core";
 import AddComment from "./AddComment";
 import CommentCard from "./CommentCard";
+//css
+import { Box, Grid, Button, Typography } from "@material-ui/core";
+
 
 const SingleBookPage = () => {
   const location = useLocation();
@@ -28,7 +27,6 @@ const SingleBookPage = () => {
     dispatch(getAllComment({ body, token })).then(() => {
       dispatch(updateBookStatus("idle"));
     });
-    console.log();
   }, []);
 
   const { commentList } = useSelector((state) => state.books);

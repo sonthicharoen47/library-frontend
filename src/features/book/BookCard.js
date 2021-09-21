@@ -16,7 +16,7 @@ const BookCard = ({ book }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   return (
-    <div>
+    <React.Fragment>
       <Card sx={{ maxWidth: 200, maxheight: 250 }}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -40,7 +40,7 @@ const BookCard = ({ book }) => {
           </Button>
         </CardActions>
       </Card>
-    </div>
+    </React.Fragment>
   );
 };
 

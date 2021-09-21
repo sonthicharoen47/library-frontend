@@ -11,10 +11,12 @@ import BookSelected from "./features/book/BookSelected";
 import OrderHistoryList from "./features/orderHistory/OrderHistoryList";
 import OrderHistorySelected from "./features/orderHistory/OrderHistorySelected";
 import AdminDashboard from "./features/admin/AdminDashboard";
+import SnackbarAlert from "./features/snackbarAlert/SnackbarAlert";
 
 function App() {
   return (
     <Router>
+      <SnackbarAlert />
       <Navbar />
       <div className="App">
         <Switch>

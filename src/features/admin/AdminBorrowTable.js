@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateBorrowStatus,
-  updateAdminStatus,
-  deletedBorrow,
-  getAllBorrow,
-} from "./adminsSlice";
+import { updateBorrowStatus, deletedBorrow, getAllBorrow } from "./adminsSlice";
 import { alpha } from "@mui/material/styles";
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 
 import {
   Checkbox,
@@ -26,7 +22,6 @@ import {
   IconButton,
   Modal,
   Button,
-  Snackbar,
   InputLabel,
   MenuItem,
   FormControl,
@@ -37,11 +32,6 @@ import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import MuiAlert from "@mui/material/Alert";
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const modalStyle = {
   position: "absolute",
@@ -243,7 +233,18 @@ const ButtonModal = (props) => {
     let body = {
       borrowListId: borrowId,
     };
-    dispatch(deletedBorrow({ body, token })).then(() => {
+    dispatch(deletedBorrow({ body, token })).then((result) => {
+      let text = "";
+      let severity = "info";
+      if (result.payload.message) {
+        text = result.payload.message;
+        severity = "success";
+      }
+      if (result.payload.err) {
+        text = result.payload.err;
+        severity = "error";
+      }
+      dispatch(postSnackbarAlert({ text, severity }));
       dispatch(getAllBorrow({ token }));
     });
     handleDeleteClose();
@@ -262,7 +263,18 @@ const ButtonModal = (props) => {
       borrowListId: borrowId,
       status: "borrowing",
     };
-    dispatch(updateBorrowStatus({ body, token })).then(() => {
+    dispatch(updateBorrowStatus({ body, token })).then((result) => {
+      let text = "";
+      let severity = "info";
+      if (result.payload.message) {
+        text = result.payload.message;
+        severity = "success";
+      }
+      if (result.payload.err) {
+        text = result.payload.err;
+        severity = "error";
+      }
+      dispatch(postSnackbarAlert({ text, severity }));
       dispatch(getAllBorrow({ token }));
     });
     handleUpdateClose();
@@ -319,16 +331,13 @@ const ButtonModal = (props) => {
 const AdminBorrowTable = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.accounts);
-  const { status, message, err, borrowList } = useSelector(
-    (state) => state.admins
-  );
+  const { borrowList } = useSelector((state) => state.admins);
   const [tableData, setTableData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [selected, setSelected] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("start_date");
-  const [open, setOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("ordering");
 
   useEffect(() => {
@@ -340,23 +349,6 @@ const AdminBorrowTable = () => {
       setTableData(borrowList);
     }
   }, [borrowList]);
-
-  useEffect(() => {
-    if (status === "success" && message !== "") {
-      setOpen(true);
-      setSelected([]);
-    }
-    if (status === "success") {
-      dispatch(updateAdminStatus("idle"));
-    }
-  }, [status, message, err]);
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
 
   const handleChangePage = (e, newValue) => {
     setPage(newValue);
@@ -413,20 +405,6 @@ const AdminBorrowTable = () => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <Snackbar
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        >
-          <Alert
-            onClose={handleClose}
-            serverity={open === true ? "success" : "error"}
-            sx={{ width: "100%" }}
-          >
-            {open === true ? message : err}
-          </Alert>
-        </Snackbar>
         <EnhancedTableToolbar
           numSelected={selected.length}
           selected={selected}

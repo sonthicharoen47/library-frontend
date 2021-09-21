@@ -19,19 +19,13 @@ import {
   MenuItem,
   InputLabel,
   Button,
-  Snackbar,
   Switch,
 } from "@material-ui/core";
 
 import Fade from "@mui/material/Fade";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-import MuiAlert from "@material-ui/core/Alert";
-import Slide from "@material-ui/core/Slide";
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 
 const AdminAddBook = () => {
   const dispatch = useDispatch();
@@ -43,11 +37,6 @@ const AdminAddBook = () => {
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
-  const [alert, setAlert] = useState({
-    open: false,
-    text: "",
-    severity: "",
-  });
   const [authorName, setAuthorName] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [checkAuthor, setCheckAuthor] = useState(false);
@@ -87,31 +76,22 @@ const AdminAddBook = () => {
       fk_category: category,
     };
     dispatch(postAddBook({ body, token })).then((result) => {
+      let text = "";
+      let severity = "info";
       if (result.payload.message) {
-        setAlert({
-          open: true,
-          text: result.payload.message,
-          severity: "success",
-        });
-      } else if (result.payload.err) {
-        setAlert({
-          open: true,
-          text: result.payload.err,
-          severity: "error",
-        });
+        text = result.payload.message;
+        severity = "success";
       }
+      if (result.payload.err) {
+        text = result.payload.err;
+        severity = "error";
+      }
+      dispatch(postSnackbarAlert({ text, severity }));
     });
     setTitle("");
     setDescription("");
     setAuthor("");
     setCategory("");
-  };
-
-  const handleClose = (e, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setAlert({ open: false });
   };
 
   const handleAddAuthor = () => {
@@ -120,19 +100,17 @@ const AdminAddBook = () => {
         author_name: authorName,
       };
       dispatch(postAddAuthor({ body, token })).then((result) => {
+        let text = "";
+        let severity = "info";
         if (result.payload.message) {
-          setAlert({
-            open: true,
-            text: result.payload.message,
-            severity: "success",
-          });
-        } else if (result.payload.err) {
-          setAlert({
-            open: true,
-            text: result.payload.err,
-            severity: "error",
-          });
+          text = result.payload.message;
+          severity = "success";
         }
+        if (result.payload.err) {
+          text = result.payload.err;
+          severity = "error";
+        }
+        dispatch(postSnackbarAlert({ text, severity }));
       });
       dispatch(getAllAuthor({ token }));
       setAuthorName("");
@@ -144,19 +122,17 @@ const AdminAddBook = () => {
         category_name: categoryName,
       };
       dispatch(postAddCategory({ body, token })).then((result) => {
+        let text = "";
+        let severity = "info";
         if (result.payload.message) {
-          setAlert({
-            open: true,
-            text: result.payload.message,
-            severity: "success",
-          });
-        } else if (result.payload.err) {
-          setAlert({
-            open: true,
-            text: result.payload.err,
-            severity: "error",
-          });
+          text = result.payload.message;
+          severity = "success";
         }
+        if (result.payload.err) {
+          text = result.payload.err;
+          severity = "error";
+        }
+        dispatch(postSnackbarAlert({ text, severity }));
       });
       dispatch(getAllCategory({ token }));
       setCategoryName("");
@@ -166,7 +142,7 @@ const AdminAddBook = () => {
   useEffect(() => {
     dispatch(getAllAuthor({ token }));
     dispatch(getAllCategory({ token }));
-  }, [dispatch, token]);
+  }, [authorList, categoryList]);
 
   useEffect(() => {
     dispatch(updateAdminStatus("idle"));
@@ -184,21 +160,6 @@ const AdminAddBook = () => {
           p: 2,
         }}
       >
-        <Snackbar
-          open={alert.open}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          TransitionComponent={Slide}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        >
-          <Alert
-            onClose={handleClose}
-            severity={alert.severity}
-            sx={{ width: "100%" }}
-          >
-            {alert.text}
-          </Alert>
-        </Snackbar>
         <Typography variant="h3" sx={{ m: 1 }} align="center">
           Add Book Form
         </Typography>

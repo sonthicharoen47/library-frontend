@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { signoutAccount } from "../account/accountSlice";
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
+
 //css
 import {
   AppBar,
@@ -9,15 +12,28 @@ import {
   Toolbar,
   Typography,
   Button,
-} from "@material-ui/core";
-
-import { signoutAccount } from "../account/accountSlice";
+} from "@mui/material";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { user, isLogged, token } = useSelector((state) => state.accounts);
   const [logInView, setLogInView] = useState("hidden");
+
+  const handleLogout = () => {
+    dispatch(signoutAccount()).then((result) => {
+      let text = "";
+      let severity = "info";
+      if (result.payload.message) {
+        text = result.payload.message;
+        severity = "success";
+        dispatch(postSnackbarAlert({ text, severity }));
+      }
+    });
+    setTimeout(() => {
+      history.push("/login");
+    }, 1000);
+  };
 
   useEffect(() => {
     if (user && isLogged && token) {
@@ -67,7 +83,7 @@ const Navbar = () => {
               href="/login"
               variant="outlined"
               sx={{ my: 1, mx: 1.5 }}
-              onClick={() => dispatch(signoutAccount())}
+              onClick={handleLogout}
             >
               Logout
             </Button>

@@ -1,16 +1,14 @@
 import React from "react";
 import AddminAddBook from "./AdminAddBook";
 import AdminBorrowTable from "./AdminBorrowTable";
-import AdminTest from "./AdminTest";
 
 const AdminDashboard = () => {
   return (
-    <div>
+    <React.Fragment>
       <h1>Admin Dashboard</h1>
-      {/* <AddminAddBook /> */}
       <AdminBorrowTable />
-      {/* <AdminTest /> */}
-    </div>
+      <AddminAddBook />
+    </React.Fragment>
   );
 };
 
