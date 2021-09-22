@@ -3,10 +3,10 @@ import { getWithoutTokenApi, postWithoutTokenApi } from "../../api/publicApi";
 const initialState = {
   status: "idle",
   token: "",
-  user: {},
-  isLogged: false,
+  user: null,
   err: null,
   message: "",
+  isLogged: false,
 };
 
 export const signupAccount = createAsyncThunk(

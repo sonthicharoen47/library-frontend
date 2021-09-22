@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import AccountAddForm from "./features/account/AccountAddForm";
 import Navbar from "./features/navbar/Navbar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -12,6 +11,7 @@ import OrderHistoryList from "./features/orderHistory/OrderHistoryList";
 import OrderHistorySelected from "./features/orderHistory/OrderHistorySelected";
 import AdminDashboard from "./features/admin/AdminDashboard";
 import SnackbarAlert from "./features/snackbarAlert/SnackbarAlert";
+import ProtectedRoute from "./protected.rotue";
 
 function App() {
   return (
@@ -20,27 +20,35 @@ function App() {
       <Navbar />
       <div className="App">
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <React.Fragment>
-                <LoginForm />
-              </React.Fragment>
-            )}
-          />
-          <Route exact path="/login" component={LoginForm} />
+          <Route exact path={["/", "/login"]} component={LoginForm} />
           <Route exact path="/register" component={AccountAddForm} />
-          <Route exact path="/dashboard" component={BookList} />
-          <Route exact path="/dashboard/me" component={SingleBookPage} />
-          <Route exact path="/dashboard/selected" component={BookSelected} />
-          <Route exact path="/orderhistory" component={OrderHistoryList} />
-          <Route
+
+          <ProtectedRoute exact path="/dashboard" component={BookList} />
+          <ProtectedRoute
+            exact
+            path="/dashboard/me"
+            component={SingleBookPage}
+          />
+          <ProtectedRoute
+            exact
+            path="/dashboard/selected"
+            component={BookSelected}
+          />
+          <ProtectedRoute
+            exact
+            path="/orderhistory"
+            component={OrderHistoryList}
+          />
+          <ProtectedRoute
             exact
             path="/orderhistory/date"
             component={OrderHistorySelected}
           />
-          <Route exact path="/admin/dashboard" component={AdminDashboard} />
+          <ProtectedRoute
+            exact
+            path="/admin/dashboard"
+            component={AdminDashboard}
+          />
         </Switch>
       </div>
     </Router>
