@@ -7,7 +7,6 @@ import CommentCard from "./CommentCard";
 //css
 import { Box, Grid, Button, Typography } from "@material-ui/core";
 
-
 const SingleBookPage = () => {
   const location = useLocation();
   const bookId = location.state.bookId;
@@ -27,7 +26,7 @@ const SingleBookPage = () => {
     dispatch(getAllComment({ body, token })).then(() => {
       dispatch(updateBookStatus("idle"));
     });
-  }, []);
+  }, [book.id_book, dispatch, token]);
 
   const { commentList } = useSelector((state) => state.books);
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBook, updateBookStatus } from "./bookSlice";
+import { getAllBook } from "./bookSlice";
 import BookCard from "./BookCard";
 
 //css import
@@ -12,9 +12,7 @@ const BookList = () => {
   const { token } = useSelector((state) => state.accounts);
 
   useEffect(() => {
-    dispatch(getAllBook({ token })).then(() => {
-      dispatch(updateBookStatus("idle"));
-    });
+    dispatch(getAllBook({ token }));
   }, [dispatch, token]);
 
   return (

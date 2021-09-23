@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signinAccount } from "./accountSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 //css
 import {
@@ -20,6 +20,18 @@ import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 const LoginForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { token, user } = useSelector((state) => state.accounts);
+
+  useEffect(() => {
+    if (token !== "" && user !== null) {
+      if (user.role === "user") {
+        history.push("/dashboard");
+      }
+      if (user.role === "admin") {
+        history.push("/admin/dashboard");
+      }
+    }
+  }, [history, token, user]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

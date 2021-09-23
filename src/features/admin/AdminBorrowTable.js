@@ -342,7 +342,7 @@ const AdminBorrowTable = () => {
 
   useEffect(() => {
     dispatch(getAllBorrow({ token }));
-  }, []);
+  }, [dispatch, token]);
 
   useEffect(() => {
     if (borrowList !== []) {

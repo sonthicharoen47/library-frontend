@@ -3,7 +3,6 @@ import {
   getAllAuthor,
   getAllCategory,
   postAddBook,
-  updateAdminStatus,
   postAddAuthor,
   postAddCategory,
 } from "./adminsSlice";
@@ -30,9 +29,7 @@ import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 const AdminAddBook = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.accounts);
-  const { authorList, categoryList, status } = useSelector(
-    (state) => state.admins
-  );
+  const { authorList, categoryList } = useSelector((state) => state.admins);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
@@ -142,11 +139,7 @@ const AdminAddBook = () => {
   useEffect(() => {
     dispatch(getAllAuthor({ token }));
     dispatch(getAllCategory({ token }));
-  }, [authorList, categoryList]);
-
-  useEffect(() => {
-    dispatch(updateAdminStatus("idle"));
-  }, [dispatch, status]);
+  });
 
   return (
     <Container>

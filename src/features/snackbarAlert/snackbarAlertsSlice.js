@@ -11,7 +11,6 @@ const snackbarAlertsSlice = createSlice({
   initialState,
   reducers: {
     postSnackbarAlert(state, action) {
-      console.log(action);
       state.open = true;
       state.text = action.payload.text;
       state.severity = action.payload.severity;

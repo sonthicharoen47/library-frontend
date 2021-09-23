@@ -12,6 +12,7 @@ import OrderHistorySelected from "./features/orderHistory/OrderHistorySelected";
 import AdminDashboard from "./features/admin/AdminDashboard";
 import SnackbarAlert from "./features/snackbarAlert/SnackbarAlert";
 import ProtectedRoute from "./protected.rotue";
+import PageNotFound from "./PageNotFound";
 
 function App() {
   return (
@@ -22,7 +23,6 @@ function App() {
         <Switch>
           <Route exact path={["/", "/login"]} component={LoginForm} />
           <Route exact path="/register" component={AccountAddForm} />
-
           <ProtectedRoute exact path="/dashboard" component={BookList} />
           <ProtectedRoute
             exact
@@ -49,6 +49,7 @@ function App() {
             path="/admin/dashboard"
             component={AdminDashboard}
           />
+          <Route component={PageNotFound} />
         </Switch>
       </div>
     </Router>

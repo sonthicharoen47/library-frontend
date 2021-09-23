@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getWithoutTokenApi, postWithoutTokenApi } from "../../api/publicApi";
+import {
+  getWithoutTokenApi,
+  postWithoutTokenApi,
+} from "../../api/publicApi";
 const initialState = {
   status: "idle",
   token: "",
@@ -37,6 +40,7 @@ const accountsSlice = createSlice({
     updateAccountStatus: (state, action) => {
       state.status = action.payload;
     },
+    logout: () => initialState,
   },
 
   extraReducers: {
@@ -70,13 +74,12 @@ const accountsSlice = createSlice({
       state.loading = false;
     },
     [signoutAccount.fulfilled]: (state, action) => {
-      state.token = "";
-      state.user = {};
+      state.message = action.payload.message;
+      state.status = "success";
       state.isLogged = false;
-      state.message = action.payload;
     },
   },
 });
 
-export const { updateAccountStatus } = accountsSlice.actions;
+export const { updateAccountStatus, logout } = accountsSlice.actions;
 export default accountsSlice.reducer;

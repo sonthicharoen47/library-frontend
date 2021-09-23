@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { signoutAccount } from "../account/accountSlice";
+import { signoutAccount, logout } from "../account/accountSlice";
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 
 //css
@@ -30,6 +30,8 @@ const Navbar = () => {
         dispatch(postSnackbarAlert({ text, severity }));
       }
     });
+    dispatch(logout());
+    localStorage.clear();
     setTimeout(() => {
       history.push("/login");
     }, 1000);
@@ -80,7 +82,6 @@ const Navbar = () => {
             </nav>
 
             <Button
-              href="/login"
               variant="outlined"
               sx={{ my: 1, mx: 1.5 }}
               onClick={handleLogout}
@@ -112,10 +113,9 @@ const Navbar = () => {
             </Typography>
 
             <Button
-              href="/login"
               variant="outlined"
               sx={{ my: 1, mx: 1.5 }}
-              onClick={() => dispatch(signoutAccount())}
+              onClick={handleLogout}
             >
               Logout
             </Button>
