@@ -188,7 +188,11 @@ const EnhancedTableToolbar = (props) => {
           <Box>
             {numSelected > 0 ? (
               <Box sx={{ display: "flex", justifyContent: "flex-end", mr: 4 }}>
-                <ButtonModal borrowId={selected} token={token} />
+                <ButtonModal
+                  borrowId={selected}
+                  token={token}
+                  statusFilter={statusFilter}
+                />
               </Box>
             ) : (
               <Box sx={{ display: "flex", justifyContent: "flex-end", mr: 4 }}>
@@ -224,7 +228,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const ButtonModal = (props) => {
-  const { borrowId, token } = props;
+  const { borrowId, token, statusFilter } = props;
   const [updateOpen, setUpdateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const dispatch = useDispatch();
@@ -232,6 +236,7 @@ const ButtonModal = (props) => {
   const handleDeleteClick = () => {
     let body = {
       borrowListId: borrowId,
+      status: statusFilter,
     };
     dispatch(deletedBorrow({ body, token })).then((result) => {
       let text = "";
@@ -258,12 +263,12 @@ const ButtonModal = (props) => {
     setDeleteOpen(false);
   };
 
-  const handleUpdateClick = () => {
+  const handleUpdateClick = async () => {
     let body = {
       borrowListId: borrowId,
-      status: "borrowing",
+      status: statusFilter,
     };
-    dispatch(updateBorrowStatus({ body, token })).then((result) => {
+    await dispatch(updateBorrowStatus({ body, token })).then((result) => {
       let text = "";
       let severity = "info";
       if (result.payload.message) {
@@ -275,8 +280,8 @@ const ButtonModal = (props) => {
         severity = "error";
       }
       dispatch(postSnackbarAlert({ text, severity }));
-      dispatch(getAllBorrow({ token }));
     });
+    await dispatch(getAllBorrow({ token }));
     handleUpdateClose();
   };
 
@@ -290,9 +295,12 @@ const ButtonModal = (props) => {
 
   return (
     <React.Fragment>
-      <IconButton onClick={handleUpdateOpen}>
-        <DoneIcon />
-      </IconButton>
+      {statusFilter === "return" ? null : (
+        <IconButton onClick={handleUpdateOpen}>
+          <DoneIcon />
+        </IconButton>
+      )}
+
       <IconButton onClick={handleDeleteOpen}>
         <DeleteIcon />
       </IconButton>
@@ -345,10 +353,9 @@ const AdminBorrowTable = () => {
   }, [dispatch, token]);
 
   useEffect(() => {
-    if (borrowList !== []) {
-      setTableData(borrowList);
-    }
-  }, [borrowList]);
+    setTableData(borrowList.filter((items) => items.status === statusFilter));
+    setSelected([]);
+  }, [statusFilter, borrowList]);
 
   const handleChangePage = (e, newValue) => {
     setPage(newValue);
@@ -423,7 +430,6 @@ const AdminBorrowTable = () => {
             />
             <TableBody>
               {tableData
-                .filter((items) => items.status === statusFilter)
                 .slice()
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -466,7 +472,11 @@ const AdminBorrowTable = () => {
                         {row.end_date.slice(0, 10)}
                       </TableCell>
                       <TableCell align="right">
-                        <ButtonModal borrowId={row.id_borrow} token={token} />
+                        <ButtonModal
+                          borrowId={row.id_borrow}
+                          token={token}
+                          statusFilter={statusFilter}
+                        />
                       </TableCell>
                     </TableRow>
                   );

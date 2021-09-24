@@ -29,5 +29,5 @@ const orderHistorysSlice = createSlice({
   },
 });
 
-export const {} = orderHistorysSlice.actions;
+// export const {} = orderHistorysSlice.actions;
 export default orderHistorysSlice.reducer;
