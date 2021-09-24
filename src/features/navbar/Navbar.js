@@ -20,8 +20,9 @@ const Navbar = () => {
   const { user, isLogged, token } = useSelector((state) => state.accounts);
   const [logInView, setLogInView] = useState("hidden");
 
-  const handleLogout = () => {
-    dispatch(signoutAccount()).then((result) => {
+  const handleLogout = async () => {
+    await dispatch(logout());
+    await dispatch(signoutAccount()).then((result) => {
       let text = "";
       let severity = "info";
       if (result.payload.message) {
@@ -30,8 +31,8 @@ const Navbar = () => {
         dispatch(postSnackbarAlert({ text, severity }));
       }
     });
-    dispatch(logout());
     localStorage.clear();
+
     setTimeout(() => {
       history.push("/login");
     }, 1000);

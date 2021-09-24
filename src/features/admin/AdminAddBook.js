@@ -91,12 +91,12 @@ const AdminAddBook = () => {
     setCategory("");
   };
 
-  const handleAddAuthor = () => {
+  const handleAddAuthor = async () => {
     if (authorName !== "") {
       let body = {
         author_name: authorName,
       };
-      dispatch(postAddAuthor({ body, token })).then((result) => {
+      await dispatch(postAddAuthor({ body, token })).then((result) => {
         let text = "";
         let severity = "info";
         if (result.payload.message) {
@@ -109,16 +109,16 @@ const AdminAddBook = () => {
         }
         dispatch(postSnackbarAlert({ text, severity }));
       });
-      dispatch(getAllAuthor({ token }));
+      await dispatch(getAllAuthor({ token }));
       setAuthorName("");
     }
   };
-  const handleAddCategory = () => {
+  const handleAddCategory = async () => {
     if (categoryName !== "") {
       let body = {
         category_name: categoryName,
       };
-      dispatch(postAddCategory({ body, token })).then((result) => {
+      await dispatch(postAddCategory({ body, token })).then((result) => {
         let text = "";
         let severity = "info";
         if (result.payload.message) {
@@ -131,15 +131,18 @@ const AdminAddBook = () => {
         }
         dispatch(postSnackbarAlert({ text, severity }));
       });
-      dispatch(getAllCategory({ token }));
+      await dispatch(getAllCategory({ token }));
       setCategoryName("");
     }
   };
 
   useEffect(() => {
     dispatch(getAllAuthor({ token }));
+  }, [dispatch, token]);
+
+  useEffect(() => {
     dispatch(getAllCategory({ token }));
-  });
+  }, [dispatch, token]);
 
   return (
     <Container>
