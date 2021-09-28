@@ -14,8 +14,20 @@ import {
   Link,
   Container,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
+import SvgLogin from "../../picture/undraw_secure_login_pdn4.svg";
+
+import { styled } from "@mui/material/styles";
+import { amber } from "@mui/material/colors";
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(amber[600]),
+  backgroundColor: amber[600],
+  "&:hover": {
+    backgroundColor: amber[700],
+  },
+}));
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -108,75 +120,124 @@ const LoginForm = () => {
 
   return (
     <React.Fragment>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 6,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1, mb: 2 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={onEmailChanged}
-              helperText={emailValidate.helpText}
-              error={emailValidate.error}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={onPasswordChanged}
-              helperText={passwordValidate.helpText}
-              error={passwordValidate.error}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
+      <CssBaseline />
+      <Container maxWidth="xl">
+        <Box sx={{ height: "100vh" }}>
+          <Grid container direction="row">
             <Grid
-              container
-              direction="row"
-              justifyContent="flex-end"
+              item
+              xs={6}
+              justifyContent="center"
               alignItems="center"
+              display="flex"
             >
-              <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Box
+                sx={{
+                  width: "80vh",
+                  height: "100vh",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  ml: 6,
+                }}
+                component="img"
+                src={SvgLogin}
+                alt="login please"
+              />
             </Grid>
-          </Box>
+            <Grid
+              item
+              xs={6}
+              justifyContent="center"
+              alignItems="center"
+              display="flex"
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "50vh",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  bgcolor: "background.paper",
+                  overflow: "hidden",
+                  borderRadius: "16px",
+                  boxShadow: 3,
+                  fontWeight: "bold",
+                  px: 3,
+                  pt: 2,
+                  pb: 1,
+                  mr: 10,
+                }}
+              >
+                <Avatar
+                  sx={{
+                    m: 1,
+                    width: 50,
+                    height: 50,
+                    bgcolor: "#3949ab",
+                  }}
+                >
+                  <AccountCircleRoundedIcon sx={{ fontSize: 50 }} />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Sign in
+                </Typography>
+                <Box
+                  component="form"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  sx={{ mt: 1, mb: 2 }}
+                >
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={email}
+                    onChange={onEmailChanged}
+                    helperText={emailValidate.helpText}
+                    error={emailValidate.error}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={onPasswordChanged}
+                    helperText={passwordValidate.helpText}
+                    error={passwordValidate.error}
+                  />
+                  <ColorButton
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    Sign In
+                  </ColorButton>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                  >
+                    <Link href="/register" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </React.Fragment>

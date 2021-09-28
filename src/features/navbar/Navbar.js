@@ -46,85 +46,92 @@ const Navbar = () => {
     }
   }, [user, isLogged, token]);
 
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      {user && user.role === "user" ? (
-        <AppBar
-          position="static"
-          color="default"
-          elevation={0}
-          sx={{
-            bordetrBottom: (theme) => `1px solid ${theme.palette.divider}`,
-            visibility: logInView,
-          }}
-        >
-          <Toolbar sx={{ flexWrap: "wrap" }}>
-            <Typography
-              variant="h3"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              <Button onClick={() => history.push("/dashboard")}>
-                Library Online
-              </Button>
-            </Typography>
-            <nav>
-              <Link to="/dashboard/selected" style={{ textDecoration: "none" }}>
-                <Button type="button">BookSelected</Button>
-              </Link>
-              <Link
-                to="/orderhistory"
-                style={{ textDecoration: "none", height: "100%" }}
+  if (token) {
+    return (
+      <React.Fragment>
+        <CssBaseline />
+        {user && user.role === "user" ? (
+          <AppBar
+            position="static"
+            color="default"
+            elevation={0}
+            sx={{
+              bordetrBottom: (theme) => `1px solid ${theme.palette.divider}`,
+              visibility: logInView,
+            }}
+          >
+            <Toolbar sx={{ flexWrap: "wrap" }}>
+              <Typography
+                variant="h3"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1 }}
               >
-                <Button type="button">history</Button>
-              </Link>
-            </nav>
+                <Button onClick={() => history.push("/dashboard")}>
+                  Library Online
+                </Button>
+              </Typography>
+              <nav>
+                <Link
+                  to="/dashboard/selected"
+                  style={{ textDecoration: "none" }}
+                >
+                  <Button type="button">BookSelected</Button>
+                </Link>
+                <Link
+                  to="/orderhistory"
+                  style={{ textDecoration: "none", height: "100%" }}
+                >
+                  <Button type="button">history</Button>
+                </Link>
+              </nav>
 
-            <Button
-              variant="outlined"
-              sx={{ my: 1, mx: 1.5 }}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          </Toolbar>
-        </AppBar>
-      ) : (
-        <AppBar
-          position="static"
-          color="default"
-          elevation={0}
-          sx={{
-            bordetrBottom: (theme) => `1px solid ${theme.palette.divider}`,
-            visibility: logInView,
-          }}
-        >
-          <Toolbar sx={{ flexWrap: "wrap" }}>
-            <Typography
-              variant="h3"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              <Button onClick={() => history.push("/admin/dashboard")}>
-                Library Online
+              <Button
+                variant="outlined"
+                sx={{ my: 1, mx: 1.5 }}
+                onClick={handleLogout}
+              >
+                Logout
               </Button>
-            </Typography>
+            </Toolbar>
+          </AppBar>
+        ) : (
+          <AppBar
+            position="static"
+            color="default"
+            elevation={0}
+            sx={{
+              bordetrBottom: (theme) => `1px solid ${theme.palette.divider}`,
+              visibility: logInView,
+            }}
+          >
+            <Toolbar sx={{ flexWrap: "wrap" }}>
+              <Typography
+                variant="h3"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1 }}
+              >
+                <Button onClick={() => history.push("/admin/dashboard")}>
+                  Library Online
+                </Button>
+              </Typography>
 
-            <Button
-              variant="outlined"
-              sx={{ my: 1, mx: 1.5 }}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          </Toolbar>
-        </AppBar>
-      )}
-    </React.Fragment>
-  );
+              <Button
+                variant="outlined"
+                sx={{ my: 1, mx: 1.5 }}
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </Toolbar>
+          </AppBar>
+        )}
+      </React.Fragment>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default Navbar;

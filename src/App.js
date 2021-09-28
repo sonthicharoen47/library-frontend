@@ -14,6 +14,7 @@ import SnackbarAlert from "./features/snackbarAlert/SnackbarAlert";
 import ProtectedRoute from "./protected.rotue";
 import PageNotFound from "./PageNotFound";
 
+//base color #B769FB purple
 function App() {
   return (
     <Router>
