@@ -17,6 +17,7 @@ import {
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 import SvgLogin from "../../picture/undraw_secure_login_pdn4.svg";
+import SvgWelcome from "../../picture/undraw_welcome_cats_thqn.svg";
 
 import { styled } from "@mui/material/styles";
 import { amber } from "@mui/material/colors";
@@ -130,14 +131,28 @@ const LoginForm = () => {
               justifyContent="center"
               alignItems="center"
               display="flex"
+              direction="column"
             >
               <Box
                 sx={{
-                  width: "80vh",
-                  height: "100vh",
+                  width: "50vh",
+                  height: "30vh",
                   justifyContent: "center",
                   alignItems: "center",
-                  ml: 6,
+                  ml: 26,
+                  mt: 6,
+                }}
+                component="img"
+                src={SvgWelcome}
+                alt="login please"
+              />
+              <Box
+                sx={{
+                  width: "80vh",
+                  height: "50vh",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  ml: 12,
                 }}
                 component="img"
                 src={SvgLogin}
@@ -150,7 +165,20 @@ const LoginForm = () => {
               justifyContent="center"
               alignItems="center"
               display="flex"
+              direction="column"
             >
+              <Typography
+                variant="h2"
+                sx={{
+                  fontStyle: "italic",
+                  fontFamily: "Monospace",
+                  letterSpacing: 2,
+                  color: "#673ab7",
+                  fontWeight: "medium",
+                }}
+              >
+                Kit Library Online
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -166,7 +194,7 @@ const LoginForm = () => {
                   px: 3,
                   pt: 2,
                   pb: 1,
-                  mr: 10,
+                  mt: 6,
                 }}
               >
                 <Avatar
