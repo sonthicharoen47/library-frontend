@@ -127,6 +127,7 @@ const LoginForm = () => {
           <Grid container direction="row">
             <Grid
               item
+              container
               xs={6}
               justifyContent="center"
               alignItems="center"
@@ -161,6 +162,7 @@ const LoginForm = () => {
             </Grid>
             <Grid
               item
+              container
               xs={6}
               justifyContent="center"
               alignItems="center"
