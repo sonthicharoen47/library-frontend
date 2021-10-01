@@ -4,7 +4,7 @@ import { getAllBook } from "./bookSlice";
 import BookCard from "./BookCard";
 
 //css import
-import { CssBaseline, Container, Grid } from "@material-ui/core";
+import { Grid, Box } from "@mui/material";
 
 const BookList = () => {
   const dispatch = useDispatch();
@@ -15,23 +15,27 @@ const BookList = () => {
     dispatch(getAllBook({ token }));
   }, [dispatch, token]);
 
+  console.log(booksList);
+
   return (
-    <React.Fragment>
-      <Container>
-        <CssBaseline /> <h2>Book!!!</h2>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {booksList.map((book) => (
-            <Grid item key={book.id_book} xs={2} sm={4} md={4}>
+    <Box sx={{ flexGrow: 1, mt: 2 }}>
+      <Grid container direction="row">
+        {booksList.map((book) => (
+          <Grid item key={book.id_book} xs={2} sm={2} md={3}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              style={{ minHeight: "200px" }}
+            >
               <BookCard book={book} />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </React.Fragment>
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };
 
