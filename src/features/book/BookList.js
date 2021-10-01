@@ -20,13 +20,12 @@ const BookList = () => {
   if (booksList.length > 0) {
     return (
       <Box
-        style={{ minHeight: "100vh" }}
-        display="flex"
         sx={{
           mt: 2,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
         }}
         component="div"
       >
@@ -46,6 +45,7 @@ const BookList = () => {
             <Grid item key={book.id_book} xs={2} sm={2} md={3}>
               <Box
                 sx={{
+                  display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                 }}
