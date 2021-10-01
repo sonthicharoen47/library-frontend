@@ -17,7 +17,6 @@ import {
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 import SvgLogin from "../../picture/undraw_secure_login_pdn4.svg";
-import SvgWelcome from "../../picture/undraw_welcome_cats_thqn.svg";
 
 import { styled } from "@mui/material/styles";
 import { amber } from "@mui/material/colors";
@@ -124,7 +123,7 @@ const LoginForm = () => {
       <CssBaseline />
       <Container maxWidth="xl">
         <Box sx={{ height: "100vh" }}>
-          <Grid container direction="row">
+          <Grid container direction="row" sx={{ mt: 8 }}>
             <Grid
               item
               container
@@ -136,24 +135,12 @@ const LoginForm = () => {
             >
               <Box
                 sx={{
-                  width: "50vh",
-                  height: "30vh",
+                  width: "90vh",
+                  height: "70vh",
                   justifyContent: "center",
                   alignItems: "center",
-                  ml: 26,
+                  ml: 10,
                   mt: 6,
-                }}
-                component="img"
-                src={SvgWelcome}
-                alt="login please"
-              />
-              <Box
-                sx={{
-                  width: "80vh",
-                  height: "50vh",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  ml: 12,
                 }}
                 component="img"
                 src={SvgLogin}
@@ -179,7 +166,7 @@ const LoginForm = () => {
                   fontWeight: "medium",
                 }}
               >
-                Kit Library Online
+                Library Online
               </Typography>
               <Box
                 sx={{

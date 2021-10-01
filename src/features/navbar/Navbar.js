@@ -13,7 +13,6 @@ import {
   AppBar,
   CssBaseline,
   Toolbar,
-  Typography,
   Button,
   Slide,
   Box,
