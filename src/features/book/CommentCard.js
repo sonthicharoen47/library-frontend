@@ -6,7 +6,8 @@ const CommentCard = ({ comment }) => {
     <Box
       sx={{
         bgcolor: "background.paper",
-        m: 1,
+        mb: 2,
+        mx: 1,
         overflow: "hidden",
         borderRadius: "12px",
         boxShadow: 1,
@@ -21,20 +22,20 @@ const CommentCard = ({ comment }) => {
       <Typography variant="body1" align="left" sx={{ pl: 2, mb: 1 }}>
         {comment.comment ? comment.comment : ""}
       </Typography>
-      <Box sx={{ bgcolor: "#e3f2fd" }}>
+      <Box sx={{ bgcolor: "grey.200", py: 1 }}>
         <Grid container direction="row">
-          <Grid xs={6} item sx={{ bgcolor: "warning.main" }}>
+          <Grid xs={6} item>
             <Typography
               variant="body2"
               align="left"
-              sx={{ color: "text.secondary", pl: 2 }}
+              sx={{ color: "text.secondary", mx: 2 }}
             >{`${comment.fname} ${comment.lname}`}</Typography>
           </Grid>
-          <Grid xs={6} item sx={{ bgcolor: "success.main" }}>
+          <Grid xs={6} item>
             <Typography
               variant="body2"
               align="right"
-              sx={{ color: "text.secondary", pr: 2 }}
+              sx={{ color: "text.secondary", mx: 2 }}
             >{`${comment.date} ${comment.time}`}</Typography>
           </Grid>
         </Grid>

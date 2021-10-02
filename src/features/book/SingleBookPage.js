@@ -5,7 +5,18 @@ import { booksSelected, getAllComment, updateBookStatus } from "./bookSlice";
 import AddComment from "./AddComment";
 import CommentCard from "./CommentCard";
 //css
-import { Box, Grid, Button, Typography } from "@material-ui/core";
+import { Box, Grid, Button, Typography } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
+import { amber } from "@mui/material/colors";
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(amber[600]),
+  backgroundColor: amber[600],
+  "&:hover": {
+    backgroundColor: amber[700],
+  },
+}));
 
 const SingleBookPage = () => {
   const location = useLocation();
@@ -30,16 +41,8 @@ const SingleBookPage = () => {
 
   const { commentList } = useSelector((state) => state.books);
 
-  if (!book) {
-    return (
-      <section>
-        <h1>Book is missing!</h1>
-      </section>
-    );
-  }
-
   return (
-    <Box sx={{ bgcolor: "primary.main" }}>
+    <Box>
       <Grid container sx={{ mb: 3 }}>
         <Grid item xs={6} align="center">
           <Box
@@ -53,16 +56,13 @@ const SingleBookPage = () => {
               boxShadow: 1,
               fontWeight: "bold",
               m: 2,
+              width: "80vh",
+              height: "60vh",
             }}
           >
             <Box
+              sx={{ width: "100%", height: "100%" }}
               component="img"
-              sx={{
-                height: 233,
-                width: 350,
-                maxHeight: { xs: 233, md: 167 },
-                maxWidth: { xs: 350, md: 250 },
-              }}
               alt="The house from the offer."
               src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
             />
@@ -83,13 +83,20 @@ const SingleBookPage = () => {
           >
             <Box
               sx={{
-                p: 1,
                 bgcolor: "grey.300",
                 justifyContent: "center",
                 display: "flex",
               }}
             >
-              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: "bold",
+                  fontFamily: "monospace",
+                  m: 1,
+                  color: "#304ffe",
+                }}
+              >
                 {book.title}
               </Typography>
             </Box>
@@ -97,41 +104,40 @@ const SingleBookPage = () => {
               sx={{
                 p: 1,
                 pl: 8,
-                bgcolor: "success.main",
                 justifyContent: "flex-start",
                 display: "flex",
+                borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
               }}
             >
-              <Typography variant="body2">{book.description}</Typography>
+              <Typography variant="body1">{book.description}</Typography>
             </Box>
             <Box
               sx={{
                 p: 1,
-                bgcolor: "warning.main",
                 justifyContent: "center",
                 alignItems: "flex-end",
                 display: "flex",
               }}
             >
-              <Button
-                sx={{ mx: 2, border: 1, borderRadius: 4 }}
+              <ColorButton
+                sx={{ mx: 2, borderRadius: 2 }}
                 onClick={() => dispatch(booksSelected(book))}
               >
                 Add
-              </Button>
-              <Button
-                sx={{ mx: 2, border: 1, borderRadius: 4 }}
+              </ColorButton>
+              <ColorButton
+                sx={{ mx: 2, borderRadius: 2 }}
                 onClick={() => history.goBack()}
               >
                 Back
-              </Button>
+              </ColorButton>
             </Box>
           </Box>
         </Grid>
       </Grid>
       <AddComment bookId={book.id_book} />
-      <Box sx={{ mt: 2, alignItems: "center" }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", pl: 6 }}>
+      <Box sx={{ mt: 2, mx: 10 }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold", my: 1 }}>
           CommentCardList
         </Typography>
         <Grid container>
@@ -142,7 +148,9 @@ const SingleBookPage = () => {
               </Grid>
             ))
           ) : (
-            <h1>no comment</h1>
+            <Typography variant="h6" sx={{ my: 1, mx: 6 }}>
+              No Comment
+            </Typography>
           )}
         </Grid>
       </Box>

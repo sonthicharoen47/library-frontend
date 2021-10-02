@@ -16,13 +16,11 @@ const BookList = () => {
 
   useEffect(() => {
     dispatch(getAllBook({ token })).then((result) => {
-      let text = "";
-      let severity = "info";
       if (result.error) {
-        text = "Your Token has expired";
-        severity = "error";
+        let text = "Your Token has expired";
+        let severity = "error";
+        dispatch(postSnackbarAlert({ text, severity }));
       }
-      dispatch(postSnackbarAlert({ text, severity }));
     });
   }, [dispatch, token]);
 

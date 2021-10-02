@@ -6,20 +6,34 @@ import { Box, Typography } from "@mui/material";
 
 const PageNotFound = () => {
   return (
-    <React.Fragment>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Box
         component="img"
-        sx={{
-          height: 233,
-          width: 350,
-          maxHeight: { xs: 233, md: 167 },
-          maxWidth: { xs: 350, md: 250 },
-        }}
+        sx={{ width: "80vh", height: "60vh" }}
         alt="404 page not found"
         src={pagenotfound}
       />
-      <Typography variant="h1">404 PAGE NOT FOUND</Typography>
-    </React.Fragment>
+      <Typography
+        variant="h1"
+        sx={{
+          fontStyle: "italic",
+          fontFamily: "Monospace",
+          letterSpacing: 2,
+          fontWeight: "medium",
+          mt: 1,
+          ml: 2,
+        }}
+      >
+        404 PAGE NOT FOUND
+      </Typography>
+    </Box>
   );
 };
 

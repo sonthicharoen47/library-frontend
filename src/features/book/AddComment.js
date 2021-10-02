@@ -4,15 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 
 //css
-import {
-  Container,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Rating,
-} from "@mui/material";
+import { Box, Typography, TextField, Button, Rating } from "@mui/material";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
+
+import { styled } from "@mui/material/styles";
+import { amber } from "@mui/material/colors";
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(amber[600]),
+  backgroundColor: amber[600],
+  "&:hover": {
+    backgroundColor: amber[700],
+  },
+}));
 
 const AddComment = ({ bookId }) => {
   const [comment, setComment] = useState("");
@@ -50,9 +54,26 @@ const AddComment = ({ bookId }) => {
   };
 
   return (
-    <Container>
-      <Box component="fieldset" sx={{ bgcolor: "background.paper" }}>
-        <Typography component="legend" sx={{ fontWeight: "bold" }}>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+      }}
+    >
+      <Box
+        component="fieldset"
+        sx={{
+          width: "60%",
+          bgcolor: "background.paper",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="h6" component="legend" sx={{ fontWeight: "bold" }}>
           Rating and Comment
         </Typography>
         <Rating
@@ -75,11 +96,13 @@ const AddComment = ({ bookId }) => {
           onChange={onCommentChanged}
           sx={{ mb: 1 }}
         />
-        <Button sx={{ border: 1, borderRadius: 4 }} onClick={handleSubmit}>
-          Post Comment
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <ColorButton sx={{ mx: 2, borderRadius: 2 }} onClick={handleSubmit}>
+            Post Comment
+          </ColorButton>
+        </Box>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
