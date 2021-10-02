@@ -117,7 +117,7 @@ const booksSlice = createSlice({
       }
     },
     [postComment.rejected]: (state, action) => {
-      state.status = "can not comment :( ";
+      state.err = "can not comment :( ";
       state.status = "fail";
     },
   },
