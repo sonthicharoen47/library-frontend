@@ -14,12 +14,14 @@ import {
   CardActions,
   Container,
   Box,
-  TextField
+  TextField,
 } from "@mui/material";
 
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
+
+import SvgEmpty from "../../picture/undraw_No_data_re_kwbl.svg";
 
 const BookSelected = () => {
   const dispatch = useDispatch();
@@ -58,40 +60,116 @@ const BookSelected = () => {
     }
   };
 
-  const renderedSelected = selectedList.map((items) => (
-    <Card key={items.id_book}>
-      <CardContent>
-        <Typography>{items.title}</Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={() => dispatch(deletedSelected(items))}>
-          Deleted
-        </Button>
-      </CardActions>
-    </Card>
-  ));
   return (
     <React.Fragment>
       <Container>
-        <h1>Book Selected!!!!</h1>
-        {selectedList.length > 0 ? renderedSelected : <h1>empty book</h1>}
-        <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Return book date"
-              value={endDate}
-              minDate={dateNow}
-              maxDate={dateMax}
-              onChange={(newValue) => {
-                setEndDate(newValue);
+        <Typography
+          variant="h2"
+          sx={{
+            fontStyle: "italic",
+            fontFamily: "fantasy",
+            letterSpacing: 3,
+            color: "#fb8c00",
+            fontWeight: "medium",
+            mt: 2,
+            flexGrow: 1,
+          }}
+        >
+          Book Selected
+        </Typography>
+        {selectedList.length > 0 ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {selectedList.map((items) => (
+              <Card
+                key={items.id_book}
+                sx={{
+                  width: "100vh",
+                  display: "flex",
+                  my: 1,
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h5" component="div">
+                    {items.title}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: "flex-end", mx: 1 }}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    onClick={() => dispatch(deletedSelected(items))}
+                  >
+                    Deleted
+                  </Button>
+                </CardActions>
+              </Card>
+            ))}
+            <Box sx={{ m: 1, display: "flex", alignItems: "center", mt: 2 }}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Return book date"
+                  value={endDate}
+                  minDate={dateNow}
+                  maxDate={dateMax}
+                  onChange={(newValue) => {
+                    setEndDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <Button
+                size="medium"
+                variant="contained"
+                color="success"
+                onClick={handleBorrow}
+                sx={{ mx: 1 }}
+              >
+                Borrow
+              </Button>
+            </Box>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                mt: 6,
+                height: "50vh",
               }}
-              renderInput={(params) => <TextField {...params} />}
+              component="img"
+              src={SvgEmpty}
+              alt="empthy selected"
             />
-          </LocalizationProvider>
-          <Button size="medium" onClick={handleBorrow} sx={{ ml: 1 }}>
-            Borrow
-          </Button>
-        </Box>
+            <Typography
+              variant="h5"
+              sx={{
+                fontStyle: "italic",
+                fontFamily: "Monospace",
+                letterSpacing: 2,
+                color: "#673ab7",
+                fontWeight: "medium",
+                mt: 1,
+              }}
+            >
+              Empthy Selected Books
+            </Typography>
+          </Box>
+        )}
       </Container>
     </React.Fragment>
   );
