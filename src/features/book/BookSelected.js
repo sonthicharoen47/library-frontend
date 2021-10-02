@@ -156,7 +156,7 @@ const BookSelected = () => {
               alt="empthy selected"
             />
             <Typography
-              variant="h5"
+              variant="h3"
               sx={{
                 fontStyle: "italic",
                 fontFamily: "Monospace",

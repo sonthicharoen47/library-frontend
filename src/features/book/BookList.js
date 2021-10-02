@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBook } from "./bookSlice";
 import BookCard from "./BookCard";
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 
 //css import
 import { Grid, Box, Typography } from "@mui/material";
@@ -14,7 +15,15 @@ const BookList = () => {
   const { token } = useSelector((state) => state.accounts);
 
   useEffect(() => {
-    dispatch(getAllBook({ token }));
+    dispatch(getAllBook({ token })).then((result) => {
+      let text = "";
+      let severity = "info";
+      if (result.error) {
+        text = "Your Token has expired";
+        severity = "error";
+      }
+      dispatch(postSnackbarAlert({ text, severity }));
+    });
   }, [dispatch, token]);
 
   if (booksList.length > 0) {
@@ -79,7 +88,7 @@ const BookList = () => {
           alt="empthy books"
         />
         <Typography
-          variant="h2"
+          variant="h3"
           sx={{
             fontStyle: "italic",
             fontFamily: "Monospace",
