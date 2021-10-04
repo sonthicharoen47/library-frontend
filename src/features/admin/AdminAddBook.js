@@ -9,7 +9,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 //css
 import {
-  Container,
   Typography,
   TextField,
   Box,
@@ -19,12 +18,42 @@ import {
   InputLabel,
   Button,
   Switch,
-} from "@material-ui/core";
-
-import Fade from "@mui/material/Fade";
-import FormControlLabel from "@mui/material/FormControlLabel";
+  Modal,
+} from "@mui/material";
 
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
+import { styled } from "@mui/material/styles";
+import { green, pink } from "@mui/material/colors";
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(green[600]),
+  backgroundColor: green[600],
+  "&:hover": {
+    backgroundColor: green[700],
+  },
+}));
+
+const AddButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(pink[600]),
+  backgroundColor: pink[600],
+  "&:hover": {
+    backgroundColor: pink[700],
+  },
+}));
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 
 const AdminAddBook = () => {
   const dispatch = useDispatch();
@@ -108,6 +137,7 @@ const AdminAddBook = () => {
           severity = "error";
         }
         dispatch(postSnackbarAlert({ text, severity }));
+        setCheckAuthor(false);
       });
       await dispatch(getAllAuthor({ token }));
       setAuthorName("");
@@ -130,6 +160,7 @@ const AdminAddBook = () => {
           severity = "error";
         }
         dispatch(postSnackbarAlert({ text, severity }));
+        setCheckCategory(false);
       });
       await dispatch(getAllCategory({ token }));
       setCategoryName("");
@@ -145,131 +176,209 @@ const AdminAddBook = () => {
   }, [dispatch, token]);
 
   return (
-    <Container>
-      <Box
+    <React.Fragment>
+      <Typography
+        variant="h2"
         sx={{
-          bgcolor: "background.paper",
-          m: 2,
-          overflow: "hidden",
-          borderRadius: "12px",
-          boxShadow: 1,
-          p: 2,
+          fontStyle: "italic",
+          fontFamily: "fantasy",
+          letterSpacing: 3,
+          color: "#fb8c00",
+          fontWeight: "medium",
+          mt: 2,
+          flexGrow: 1,
+          mx: 10,
+          mb: 1,
         }}
       >
-        <Typography variant="h3" sx={{ m: 1 }} align="center">
-          Add Book Form
-        </Typography>
-        <TextField
-          required
-          label="title"
-          value={title}
-          onChange={onTitleChanged}
-          sx={{ m: 1 }}
-        />
-        <TextField
-          fullWidth
-          label="description"
-          value={description}
-          onChange={onDescriptionChanged}
-          sx={{ m: 1 }}
-        />
-
+        Add Book Form
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Box
           sx={{
-            display: "flex",
+            bgcolor: "background.paper",
             m: 1,
+            overflow: "hidden",
+            borderRadius: "12px",
+            boxShadow: 1,
+            p: 1,
+            width: "70%",
           }}
         >
-          <FormControl sx={{ minWidth: 120, mr: 2 }} required>
-            <InputLabel id="author-select-label">Author</InputLabel>
-            <Select
-              labelId="author-select-label"
-              id="author-simple-select"
-              value={author}
-              label="Author"
-              onChange={onAuthorChanged}
-            >
-              {authorList.length > 0
-                ? authorList.map((items) => (
-                    <MenuItem value={items.id_author} key={items.id_author}>
-                      {items.author_name}
-                    </MenuItem>
-                  ))
-                : ""}
-            </Select>
-          </FormControl>
-          <FormControlLabel
-            control={
-              <Switch checked={checkAuthor} onChange={onCheckAuthorChanged} />
-            }
-            label="new Author"
+          <TextField
+            fullWidth
+            required
+            label="Title"
+            value={title}
+            onChange={onTitleChanged}
+            sx={{ width: "80%", px: 1, my: 1 }}
           />
-          <Fade in={checkAuthor}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                label="Author Name"
-                onChange={onAuthorNameChanged}
-                value={authorName}
-              />
-              <Button onClick={handleAddAuthor} sx={{ ml: 1 }}>
-                Add Author
-              </Button>
-            </Box>
-          </Fade>
-        </Box>
+          <TextField
+            fullWidth
+            label="Description"
+            value={description}
+            onChange={onDescriptionChanged}
+            sx={{ px: 1 }}
+          />
 
-        <Box sx={{ display: "flex", m: 1 }}>
-          <FormControl sx={{ minWidth: 120, mr: 2 }} required>
-            <InputLabel id="category-select-label">Category</InputLabel>
-            <Select
-              labelId="category-select-label"
-              id="category-simple-select"
-              value={category}
-              label="Category"
-              onChange={onCategoryChanged}
+          <Box
+            sx={{
+              display: "flex",
+              flexGrow: 1,
+              m: 1,
+            }}
+          >
+            <FormControl sx={{ mr: 2, width: "50%", minWidth: 120 }} required>
+              <InputLabel id="author-select-label">Author</InputLabel>
+              <Select
+                labelId="author-select-label"
+                id="author-simple-select"
+                value={author}
+                label="Author"
+                onChange={onAuthorChanged}
+              >
+                {authorList.length > 0
+                  ? authorList.map((items) => (
+                      <MenuItem value={items.id_author} key={items.id_author}>
+                        {items.author_name}
+                      </MenuItem>
+                    ))
+                  : ""}
+              </Select>
+            </FormControl>
+            <AddButton onClick={onCheckAuthorChanged} sx={{ px: 2 }}>
+              Add New Author
+            </AddButton>
+            <Modal
+              open={checkAuthor}
+              onClose={() => setCheckAuthor(false)}
+              aria-labelledby="author-modal-title"
             >
-              {categoryList.length > 0
-                ? categoryList.map((items) => (
-                    <MenuItem value={items.id_category} key={items.id_category}>
-                      {items.category_name}
-                    </MenuItem>
-                  ))
-                : ""}
-            </Select>
-          </FormControl>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={checkCategory}
-                onChange={onCheckCategoryChanged}
-              />
-            }
-            label="new Category"
-          />
-          <Fade in={checkCategory}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                label="Category Name"
-                onChange={onCategoryNameChanged}
-                value={categoryName}
-              />
-              <Button onClick={handleAddCategory} sx={{ ml: 1 }}>
-                Add Category
-              </Button>
-            </Box>
-          </Fade>
-        </Box>
-        <Box
-          sx={{
-            m: 1,
-          }}
-        >
-          <Button onClick={handleSubmit} sx={{ width: "100%" }}>
-            Add
-          </Button>
+              <Box
+                sx={{
+                  ...style,
+                  width: 400,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <h2 id="author-modal-title">New Author</h2>
+                <TextField
+                  label="Author Name"
+                  onChange={onAuthorNameChanged}
+                  value={authorName}
+                />
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  <AddButton
+                    onClick={handleAddAuthor}
+                    sx={{
+                      mt: 1,
+                      width: "30%",
+                    }}
+                  >
+                    Add
+                  </AddButton>
+                </Box>
+              </Box>
+            </Modal>
+          </Box>
+
+          <Box sx={{ display: "flex", m: 1, flexGrow: 1 }}>
+            <FormControl sx={{ minWidth: 120, mr: 2, width: "50%" }} required>
+              <InputLabel id="category-select-label">Category</InputLabel>
+              <Select
+                labelId="category-select-label"
+                id="category-simple-select"
+                value={category}
+                label="Category"
+                onChange={onCategoryChanged}
+              >
+                {categoryList.length > 0
+                  ? categoryList.map((items) => (
+                      <MenuItem
+                        value={items.id_category}
+                        key={items.id_category}
+                      >
+                        {items.category_name}
+                      </MenuItem>
+                    ))
+                  : ""}
+              </Select>
+            </FormControl>
+            <AddButton onClick={onCheckCategoryChanged} sx={{ px: 2 }}>
+              Add New Category
+            </AddButton>
+            <Modal
+              open={checkCategory}
+              onClose={() => setCheckCategory(false)}
+              aria-labelledby="category-modal-title"
+            >
+              <Box
+                sx={{
+                  ...style,
+                  width: 400,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <h2 id="category-modal-title">New Category</h2>
+                <TextField
+                  label="Category Name"
+                  onChange={onCategoryNameChanged}
+                  value={categoryName}
+                />
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  <AddButton
+                    onClick={handleAddCategory}
+                    sx={{
+                      mt: 1,
+                      width: "30%",
+                    }}
+                  >
+                    Add
+                  </AddButton>
+                </Box>
+              </Box>
+            </Modal>
+            {/* <FormControlLabel
+              control={
+                <Switch
+                  checked={checkCategory}
+                  onChange={onCheckCategoryChanged}
+                />
+              }
+              label="new Category"
+            />
+            <Fade in={checkCategory}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <TextField
+                  label="Category Name"
+                  onChange={onCategoryNameChanged}
+                  value={categoryName}
+                />
+                <Button onClick={handleAddCategory} sx={{ ml: 1 }}>
+                  Add Category
+                </Button>
+              </Box>
+            </Fade> */}
+          </Box>
+          <Box
+            sx={{
+              m: 1,
+            }}
+          >
+            <ColorButton onClick={handleSubmit} sx={{ width: "100%" }}>
+              Submit
+            </ColorButton>
+          </Box>
         </Box>
       </Box>
-    </Container>
+    </React.Fragment>
   );
 };
 

@@ -9,10 +9,11 @@ import SingleBookPage from "./features/book/SingleBookPage";
 import BookSelected from "./features/book/BookSelected";
 import OrderHistoryList from "./features/orderHistory/OrderHistoryList";
 import OrderHistorySelected from "./features/orderHistory/OrderHistorySelected";
-import AdminDashboard from "./features/admin/AdminDashboard";
+import AdminBorrowTable from "./features/admin/AdminBorrowTable";
 import SnackbarAlert from "./features/snackbarAlert/SnackbarAlert";
 import ProtectedRoute from "./protected.rotue";
 import PageNotFound from "./PageNotFound";
+import AdminAddBook from "./features/admin/AdminAddBook";
 
 //base color #B769FB purple
 function App() {
@@ -47,8 +48,13 @@ function App() {
           />
           <ProtectedRoute
             exact
-            path="/admin/dashboard"
-            component={AdminDashboard}
+            path={["/admin", "/admin/dashboard"]}
+            component={AdminBorrowTable}
+          />
+          <ProtectedRoute
+            exact
+            path="/admin/addBook"
+            component={AdminAddBook}
           />
           <Route component={PageNotFound} />
         </Switch>

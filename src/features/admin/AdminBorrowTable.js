@@ -315,8 +315,21 @@ const ButtonModal = (props) => {
           <p id="update-modal-description">
             You want to changed borrow status?
           </p>
-          <Button onClick={handleUpdateClick}>Confirm</Button>
-          <Button onClick={handleUpdateClose}>Close</Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              onClick={handleUpdateClick}
+              sx={{
+                bgcolor: "success.main",
+                color: "white",
+                mt: 1,
+                width: "30%",
+                mx: 1,
+              }}
+            >
+              Confirm
+            </Button>
+            <Button onClick={handleUpdateClose}>Close</Button>
+          </Box>
         </Box>
       </Modal>
       <Modal
@@ -325,11 +338,31 @@ const ButtonModal = (props) => {
         aria-labelledby="delete-modal-title"
         aria-describedby="delete-modal-description"
       >
-        <Box sx={{ ...modalStyle, width: 400 }}>
+        <Box
+          sx={{
+            ...modalStyle,
+            width: 400,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <h2 id="delete-modal-title">Alert!</h2>
           <p id="delete-modal-description">You want to deleted this borrow?</p>
-          <Button onClick={handleDeleteClick}>Confirm</Button>
-          <Button onClick={handleDeleteClose}>Close</Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              onClick={handleDeleteClick}
+              sx={{
+                bgcolor: "error.main",
+                color: "white",
+                mt: 1,
+                width: "30%",
+                mx: 1,
+              }}
+            >
+              Confirm
+            </Button>
+            <Button onClick={handleDeleteClose}>Close</Button>
+          </Box>
         </Box>
       </Modal>
     </React.Fragment>
@@ -410,91 +443,117 @@ const AdminBorrowTable = () => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          selected={selected}
-          token={token}
-          onRequestFilter={handleRequestFilter}
-        />
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={tableData.length}
-            />
-            <TableBody>
-              {tableData
-                .slice()
-                .sort(getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id_borrow);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <React.Fragment>
+      <Typography
+        variant="h2"
+        sx={{
+          fontStyle: "italic",
+          fontFamily: "fantasy",
+          letterSpacing: 3,
+          color: "#fb8c00",
+          fontWeight: "medium",
+          mt: 2,
+          flexGrow: 1,
+          mx: 10,
+        }}
+      >
+        Admin Table
+      </Typography>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          mt: 1,
+        }}
+      >
+        <Paper sx={{ width: "80%", mb: 2 }}>
+          <EnhancedTableToolbar
+            numSelected={selected.length}
+            selected={selected}
+            token={token}
+            onRequestFilter={handleRequestFilter}
+          />
+          <TableContainer>
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={tableData.length}
+              />
+              <TableBody>
+                {tableData
+                  .slice()
+                  .sort(getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id_borrow);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      key={row.id_borrow}
-                      hover
-                      onClick={(e) => handleClick(e, row.id_borrow)}
-                      selected={isItemSelected}
-                      role="checkbox"
-                      tabIndex={-1}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        padding="none"
-                        id={labelId}
+                    return (
+                      <TableRow
+                        key={row.id_borrow}
+                        hover
+                        onClick={(e) => handleClick(e, row.id_borrow)}
+                        selected={isItemSelected}
+                        role="checkbox"
+                        tabIndex={-1}
+                        aria-checked={isItemSelected}
                       >
-                        {row.id_borrow}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.Role.Account.fname}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.start_date.slice(0, 10)}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.end_date.slice(0, 10)}
-                      </TableCell>
-                      <TableCell align="right">
-                        <ButtonModal
-                          borrowId={row.id_borrow}
-                          token={token}
-                          statusFilter={statusFilter}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={tableData.length}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box>
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          padding="none"
+                          id={labelId}
+                        >
+                          {row.id_borrow}
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.Role.Account.fname}
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.start_date.slice(0, 10)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.end_date.slice(0, 10)}
+                        </TableCell>
+                        <TableCell align="right">
+                          <ButtonModal
+                            borrowId={row.id_borrow}
+                            token={token}
+                            statusFilter={statusFilter}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={tableData.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
+    </React.Fragment>
   );
 };
 

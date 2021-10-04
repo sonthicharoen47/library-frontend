@@ -7,6 +7,7 @@ import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
 //css
 import {
@@ -95,50 +96,129 @@ const Navbar = () => {
               sx={{ flexWrap: "wrap" }}
               disableGutters={true}
             >
-              <HomeButton
-                sx={{ minHeight: 56, px: 2, color: "#ede7f6" }}
-                startIcon={<MenuBookOutlinedIcon />}
-                onClick={() => history.push("/dashboard")}
+              {/* {user && user.role === "user" ? (
+                <HomeButton
+                  sx={{ minHeight: 56, px: 2, color: "#ede7f6" }}
+                  startIcon={<MenuBookOutlinedIcon />}
+                  onClick={() => history.push("/dashboard")}
+                >
+                  Library Online
+                </HomeButton>
+              ) : (
+                <HomeButton
+                  sx={{ minHeight: 56, px: 2, color: "#ede7f6" }}
+                  startIcon={<MenuBookOutlinedIcon />}
+                  onClick={() => history.push("/admin/dashboard")}
+                >
+                  Library Online
+                </HomeButton>
+              )}
+
+              <Box sx={{ flexGrow: 1 }} /> */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: "100%",
+                }}
               >
-                Library Online
-              </HomeButton>
-              <Box sx={{ flexGrow: 1 }} />
-              {user && user.role === "user" ? (
-                <Box sx={{ display: "flex" }}>
-                  <Link
-                    to="/dashboard/selected"
-                    style={{ textDecoration: "none", marginRight: "8px" }}
+                {user && user.role === "user" ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
                   >
-                    <ColorButton
-                      variant="contained"
-                      startIcon={<AddShoppingCartOutlinedIcon />}
-                      sx={{ minHeight: 40, bgcolor: "#673ab7" }}
+                    <HomeButton
+                      sx={{ minHeight: 56, px: 2, color: "#ede7f6" }}
+                      startIcon={<MenuBookOutlinedIcon />}
+                      onClick={() => history.push("/dashboard")}
                     >
-                      BookSelected
-                    </ColorButton>
-                  </Link>
-                  <Link
-                    to="/orderhistory"
-                    style={{ textDecoration: "none", marginRight: "8px" }}
+                      Library Online
+                    </HomeButton>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Box
+                      sx={{
+                        display: "flex-end",
+                        flexDirection: "flex-end",
+                      }}
+                    >
+                      <Link
+                        to="/dashboard/selected"
+                        style={{ textDecoration: "none", marginRight: "8px" }}
+                      >
+                        <ColorButton
+                          variant="contained"
+                          startIcon={<AddShoppingCartOutlinedIcon />}
+                          sx={{ minHeight: 40, bgcolor: "#673ab7" }}
+                        >
+                          BookSelected
+                        </ColorButton>
+                      </Link>
+                      <Link
+                        to="/orderhistory"
+                        style={{ textDecoration: "none", marginRight: "8px" }}
+                      >
+                        <ColorButton
+                          variant="contained"
+                          startIcon={<HistoryOutlinedIcon />}
+                          sx={{ minHeight: 40 }}
+                        >
+                          history
+                        </ColorButton>
+                      </Link>
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
                   >
-                    <ColorButton
-                      variant="contained"
-                      startIcon={<HistoryOutlinedIcon />}
-                      sx={{ minHeight: 40 }}
+                    <HomeButton
+                      sx={{ minHeight: 56, px: 2, color: "#ede7f6" }}
+                      startIcon={<MenuBookOutlinedIcon />}
+                      onClick={() => history.push("/admin/dashboard")}
                     >
-                      history
-                    </ColorButton>
-                  </Link>
-                </Box>
-              ) : null}
-              <Button
-                sx={{ minHeight: 40, mr: 1 }}
-                variant="contained"
-                onClick={handleLogout}
-                color="error"
-              >
-                Logout
-              </Button>
+                      Library Online
+                    </HomeButton>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Box
+                      sx={{
+                        display: "flex-end",
+                        flexDirection: "flex-end",
+                      }}
+                    >
+                      <Link
+                        to="/admin/addBook"
+                        style={{ textDecoration: "none", marginRight: "8px" }}
+                      >
+                        <ColorButton
+                          variant="contained"
+                          startIcon={<AddCircleOutlineOutlinedIcon />}
+                          sx={{ minHeight: 40, bgcolor: "#673ab7" }}
+                        >
+                          Add
+                        </ColorButton>
+                      </Link>
+                    </Box>
+                  </Box>
+                )}
+                <Button
+                  sx={{ minHeight: 40, mr: 1 }}
+                  variant="contained"
+                  onClick={handleLogout}
+                  color="error"
+                >
+                  Logout
+                </Button>
+              </Box>
             </Toolbar>
           </AppBar>
         </Slide>

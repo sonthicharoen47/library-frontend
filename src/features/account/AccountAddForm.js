@@ -15,15 +15,11 @@ import {
   Container,
   TextField,
 } from "@mui/material";
-
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
-
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
-
 import SvgRegister from "../../picture/undraw_Waiting__for_you_ldha.svg";
-
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import { styled } from "@mui/material/styles";
 import { amber } from "@mui/material/colors";
