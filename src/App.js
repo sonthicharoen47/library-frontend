@@ -1,8 +1,5 @@
 import React from "react";
-import AccountAddForm from "./features/account/AccountAddForm";
-import Navbar from "./features/navbar/Navbar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
 import LoginForm from "./features/account/LoginForm";
 import BookList from "./features/book/BookList";
 import SingleBookPage from "./features/book/SingleBookPage";
@@ -14,8 +11,9 @@ import SnackbarAlert from "./features/snackbarAlert/SnackbarAlert";
 import ProtectedRoute from "./protected.rotue";
 import PageNotFound from "./PageNotFound";
 import AdminAddBook from "./features/admin/AdminAddBook";
+import AccountAddForm from "./features/account/AccountAddForm";
+import Navbar from "./features/navbar/Navbar";
 
-//base color #B769FB purple
 function App() {
   return (
     <Router>

@@ -1,6 +1,8 @@
 import React from "react";
+
 //css
-import { Box, Typography, Rating, Grid } from "@material-ui/core";
+import { Box, Typography, Rating, Grid } from "@mui/material";
+
 const CommentCard = ({ comment }) => {
   return (
     <Box

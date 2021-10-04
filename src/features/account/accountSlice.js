@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  getWithoutTokenApi,
-  postWithoutTokenApi,
-} from "../../api/publicApi";
+import { getWithoutTokenApi, postWithoutTokenApi } from "../../api/publicApi";
 const initialState = {
   status: "idle",
   token: "",

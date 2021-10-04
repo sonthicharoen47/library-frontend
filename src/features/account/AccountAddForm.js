@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signupAccount } from "./accountSlice";
 import { useHistory } from "react-router-dom";
-import { updateAccountStatus } from "./accountSlice";
+import { signupAccount, updateAccountStatus } from "./accountSlice";
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
+
 //css
 import {
   CssBaseline,
@@ -15,14 +16,15 @@ import {
   Container,
   TextField,
 } from "@mui/material";
-import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
-import SvgRegister from "../../picture/undraw_Waiting__for_you_ldha.svg";
-import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import { styled } from "@mui/material/styles";
 import { amber } from "@mui/material/colors";
+import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
+
+//pic
+import SvgRegister from "../../picture/undraw_Waiting__for_you_ldha.svg";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(amber[600]),

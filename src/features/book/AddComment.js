@@ -5,8 +5,7 @@ import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 
 //css
 import { Box, Typography, TextField, Button, Rating } from "@mui/material";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { styled } from "@mui/material/styles";
 import { amber } from "@mui/material/colors";
 

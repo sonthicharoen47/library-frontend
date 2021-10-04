@@ -2,9 +2,6 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 //css
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {
   Box,
   Accordion,
@@ -13,6 +10,8 @@ import {
   Typography,
   Container,
 } from "@mui/material";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const OrderHistorySelected = () => {
   const location = useLocation();

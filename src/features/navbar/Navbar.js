@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { signoutAccount, logout } from "../account/accountSlice";
 import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
-import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
 //css
 import {
@@ -18,9 +13,11 @@ import {
   Slide,
   Box,
 } from "@mui/material";
-
+import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-
 import { styled } from "@mui/material/styles";
 import { deepPurple, purple } from "@mui/material/colors";
 
@@ -96,25 +93,6 @@ const Navbar = () => {
               sx={{ flexWrap: "wrap" }}
               disableGutters={true}
             >
-              {/* {user && user.role === "user" ? (
-                <HomeButton
-                  sx={{ minHeight: 56, px: 2, color: "#ede7f6" }}
-                  startIcon={<MenuBookOutlinedIcon />}
-                  onClick={() => history.push("/dashboard")}
-                >
-                  Library Online
-                </HomeButton>
-              ) : (
-                <HomeButton
-                  sx={{ minHeight: 56, px: 2, color: "#ede7f6" }}
-                  startIcon={<MenuBookOutlinedIcon />}
-                  onClick={() => history.push("/admin/dashboard")}
-                >
-                  Library Online
-                </HomeButton>
-              )}
-
-              <Box sx={{ flexGrow: 1 }} /> */}
               <Box
                 sx={{
                   display: "flex",

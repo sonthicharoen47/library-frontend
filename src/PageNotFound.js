@@ -1,8 +1,10 @@
 import React from "react";
-import pagenotfound from "./picture/404.svg";
 
 //css
 import { Box, Typography } from "@mui/material";
+
+//pic
+import pagenotfound from "./picture/404.svg";
 
 const PageNotFound = () => {
   return (

@@ -7,6 +7,8 @@ import {
   postAddCategory,
 } from "./adminsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
+
 //css
 import {
   Typography,
@@ -17,11 +19,8 @@ import {
   MenuItem,
   InputLabel,
   Button,
-  Switch,
   Modal,
 } from "@mui/material";
-
-import { postSnackbarAlert } from "../snackbarAlert/snackbarAlertsSlice";
 import { styled } from "@mui/material/styles";
 import { green, pink } from "@mui/material/colors";
 
@@ -345,27 +344,6 @@ const AdminAddBook = () => {
                 </Box>
               </Box>
             </Modal>
-            {/* <FormControlLabel
-              control={
-                <Switch
-                  checked={checkCategory}
-                  onChange={onCheckCategoryChanged}
-                />
-              }
-              label="new Category"
-            />
-            <Fade in={checkCategory}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <TextField
-                  label="Category Name"
-                  onChange={onCategoryNameChanged}
-                  value={categoryName}
-                />
-                <Button onClick={handleAddCategory} sx={{ ml: 1 }}>
-                  Add Category
-                </Button>
-              </Box>
-            </Fade> */}
           </Box>
           <Box
             sx={{
