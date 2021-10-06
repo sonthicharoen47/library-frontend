@@ -13,13 +13,14 @@ import PageNotFound from "./PageNotFound";
 import AdminAddBook from "./features/admin/AdminAddBook";
 import AccountAddForm from "./features/account/AccountAddForm";
 import Navbar from "./features/navbar/Navbar";
+import Footer from "./features/footer/Footer";
 
 function App() {
   return (
     <Router>
       <SnackbarAlert />
       <Navbar />
-      <div className="App">
+      <div className="App" style={{ minHeight: "100vh" }}>
         <Switch>
           <Route exact path={["/", "/login"]} component={LoginForm} />
           <Route exact path="/register" component={AccountAddForm} />
@@ -57,6 +58,7 @@ function App() {
           <Route component={PageNotFound} />
         </Switch>
       </div>
+      <Footer />
     </Router>
   );
 }

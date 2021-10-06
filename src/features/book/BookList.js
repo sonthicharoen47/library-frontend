@@ -33,8 +33,8 @@ const BookList = () => {
           mt: 2,
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
           flexDirection: "column",
+          minHeight: "100vh",
         }}
         component="div"
       >

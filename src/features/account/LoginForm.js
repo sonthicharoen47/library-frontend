@@ -123,8 +123,8 @@ const LoginForm = () => {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="xl">
-        <Box sx={{ height: "100vh" }}>
-          <Grid container direction="row" sx={{ mt: 8 }}>
+        <Box>
+          <Grid container direction="row" sx={{ mt: 6 }}>
             <Grid
               item
               container
